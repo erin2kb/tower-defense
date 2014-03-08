@@ -20,7 +20,7 @@ import blackmere.towerdef.units.Tower;
 import blackmere.towerdef.units.Bullet;
 import blackmere.towerdef.units.Unit;
 
-public class Demo extends BasicGame {
+public class GameManager extends BasicGame {
 	
 	private TiledMap demoMap;
 	private ArrayList<Unit> allUnits;
@@ -33,7 +33,7 @@ public class Demo extends BasicGame {
 	private final float towerStartY = 120f;
 	
 
-	public Demo(String title) {
+	public GameManager(String title) {
 		super(title);
 	}
 	
@@ -150,7 +150,7 @@ public class Demo extends BasicGame {
 
 	//
 	public static void main(String[] args) {
-		Demo demoGame = new Demo("Tower Defense Demo");
+		GameManager demoGame = new GameManager("Tower Defense Demo");
 		AppGameContainer gameContainer;
 		// TODO: redirect System.err to a log file
 
