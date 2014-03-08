@@ -51,23 +51,40 @@ public class GameManager extends BasicGame {
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
 		demoMap.render(0, 0);
 		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		ArrayList<Tower> towers = new ArrayList<Tower>();
 		
 		// TODO: implement overall hierarchy (hero > bullets > enemy > tower)
+		// divide units into lists according to type
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Bullet) {
-				bullets.add((Bullet) u);	// draw bullets second last
-			} else if (u instanceof Hero) {
-				continue;	// draw hero last
+				bullets.add((Bullet) u);
+			} else if (u instanceof Enemy) {
+				enemies.add((Enemy) u);
+			} else if (u instanceof Tower) {
+				towers.add((Tower) u);
 			} else {
-				u.draw();
+				continue;
 			}
 		}
 		
-		// TODO: why is bullet still not visible when enemy reaches tower?
+		// first draw towers
+		for (Tower t : towers) {
+			t.draw();
+		}
+		
+		// then draw enemies
+		for (Enemy e : enemies) {
+			e.draw();
+		}
+		
+		// then draw bullets
+		// TODO: why is bullet still not visible when enemy reaches tower? what if it had its own sprite?
 		for (Bullet b : bullets) {
 			b.draw(arg1);	// TODO: Bullet needs Graphics; optimize this?
 		}
 		
+		// finally, draw the hero
 		activeHero.draw();
 	}
 	
