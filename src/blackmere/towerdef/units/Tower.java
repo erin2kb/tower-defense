@@ -7,8 +7,11 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Tower extends Unit {
 	
-	private final static int towerWidth = 62;
-	private final static int towerHeight = 60;
+	private final static int width = 52;
+	private final static int height = 56;
+	private final static int offsetX = 5;
+	private final static int offsetY = 3;
+	private final static int bulletOffset = 34;
 	private final static int maxHP = 120;
 	private final int delay = 2200;
 	private Image[] idleFrames;
@@ -17,7 +20,7 @@ public class Tower extends Unit {
 	private long lastShotFired;
 
 	public Tower(float startX, float startY) throws SlickException {
-		super(towerWidth, towerHeight, startX, startY, maxHP, 0);	// TODO: here and bullet, comment on 0's
+		super(startX, startY, maxHP, 0);	// TODO: here and bullet, comment on 0's
 		lastShotFired = 0;
 		
 		idleFrames = new Image[1];
@@ -30,11 +33,20 @@ public class Tower extends Unit {
 	}
 	
 	public Rectangle getBoundingBox() {
-		return new Rectangle(x + 8, y + 2, width - 16, height - 4);
+		return new Rectangle(x + offsetX, y + offsetY, width, height);
 	}
 	
 	public Rectangle getTargetBox() {
-		return new Rectangle(x, y + 4, width - 4, height - 8);  // TODO: determine these exactly
+		return getBoundingBox();
+	}
+	
+	public Rectangle getMotionBox() {
+		return getBoundingBox();
+	}
+	
+	// TODO: consolidate these 'empty' fns? i.e. make tower/bullet subclass of something?	
+	public Rectangle getAttackBox() {
+		return getBoundingBox();
 	}
 	
 	// TODO: optimize this transplanted code
@@ -55,7 +67,7 @@ public class Tower extends Unit {
 	
 	// TODO: exceptions
 	public Bullet getBullet() throws SlickException {
-		return new Bullet(x + width, y + height / 2 - 10); 	// TODO: un-hard code; use getter??
+		return new Bullet(x + bulletOffset, y);	// TODO: use getter??
 	}
 
 	// TODO: consolidate with hero, and enemy if possible

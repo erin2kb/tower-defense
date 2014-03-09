@@ -2,11 +2,12 @@ package blackmere.towerdef.units;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
 public abstract class Unit {
 	protected float x, y;
-	protected int width, height, currentHP, maxHP, damage;
+	protected int currentHP, maxHP, damage;
 	protected boolean dead, attacking, hit;
 	protected Animation sprite;
 	protected long lastHitUpdate, lastAttackUpdate;
@@ -16,9 +17,7 @@ public abstract class Unit {
 	protected final int downBound = 360;
 	protected final int hitDuration = 800;
 	
-	public Unit(int w, int h, float startX, float startY, int HP, int dmg) {
-		setWidth(w);
-		setHeight(h);
+	public Unit(float startX, float startY, int HP, int dmg) {
 		setX(startX);		// TODO: HP getter/setters?
 		setY(startY);
 		damage = dmg;
@@ -32,12 +31,15 @@ public abstract class Unit {
 	}
 	
 	public abstract Rectangle getBoundingBox();
+	public abstract Rectangle getTargetBox();
+	public abstract Rectangle getMotionBox();
+	public abstract Rectangle getAttackBox();
 	
 	public void setSprite(Animation s) {
 		sprite = s;
 	}
 	
-	public void draw() {
+	public void draw(Graphics g) {
 		checkHit();
 		
 		if (hit) {
@@ -45,6 +47,11 @@ public abstract class Unit {
 		} else {
 			sprite.draw((int) x, (int) y);
 		}
+		
+		// DEBUG: draw a bounding box
+		Rectangle box = getAttackBox();
+		g.setColor(Color.red);
+		g.draw(box);
 	}
 
 	public float getX() {
@@ -61,22 +68,6 @@ public abstract class Unit {
 
 	public void setY(float y) {
 		this.y = y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 	
 	public int getDamage() {
@@ -101,7 +92,7 @@ public abstract class Unit {
 	}
 	
 	public void checkHit() {
-		long time = System.currentTimeMillis();
+		long time = System.currentTimeMillis();		// TODO: optimize - use more reliable methods, like the nanoseconds one
 		
 		if (time - lastHitUpdate >= hitDuration) {
 			recover();
@@ -122,15 +113,17 @@ public abstract class Unit {
 		}
 	}
 	
+	// TODO: make background tiles 62x62 px
+	
 	public void takeDamage(int damageAmount) {
 		currentHP -= damageAmount;
 	}
 	
 	// TODO: clean this up; diff. bound boxes for diff. cases; prevent 'stepping on' enemies from behind
-	// TODO: document which unit must call this (i.e. to use correct bound box)
-	public boolean detectCollision(float newX, float newY, Unit other) {
-		Rectangle box = new Rectangle(newX, newY, width, height);
-		Rectangle otherBox = other.getBoundingBox();
+	// TODO: move to hero/enemy? since not used by tower/bullet
+	public boolean detectMotionCollision(Unit other) {
+		Rectangle box = getMotionBox();
+		Rectangle otherBox = other.getMotionBox();
 		
 		if (box.intersects(otherBox)) {
 			return true;

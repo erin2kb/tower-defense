@@ -54,7 +54,6 @@ public class GameManager extends BasicGame {
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		ArrayList<Tower> towers = new ArrayList<Tower>();
 		
-		// TODO: implement overall hierarchy (hero > bullets > enemy > tower)
 		// divide units into lists according to type
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Bullet) {
@@ -70,22 +69,21 @@ public class GameManager extends BasicGame {
 		
 		// first draw towers
 		for (Tower t : towers) {
-			t.draw();
+			t.draw(arg1);
 		}
 		
 		// then draw enemies
 		for (Enemy e : enemies) {
-			e.draw();
+			e.draw(arg1);
 		}
 		
 		// then draw bullets
-		// TODO: why is bullet still not visible when enemy reaches tower? what if it had its own sprite?
 		for (Bullet b : bullets) {
-			b.draw(arg1);	// TODO: Bullet needs Graphics; optimize this?
+			b.draw(arg1);
 		}
 		
 		// finally, draw the hero
-		activeHero.draw();
+		activeHero.draw(arg1);		// TODO: document why passing in arg1 (for the sake of the DEBUG code for bounding boxes)
 	}
 	
 	//
@@ -156,7 +154,7 @@ public class GameManager extends BasicGame {
 		b.move();
 		
 		for (Unit u : getActiveUnits()) {
-			if (u instanceof Enemy && b.detectCollision(b.getX(), b.getY(), u)) {
+			if (u instanceof Enemy && b.detectBulletCollision((Enemy) u)) {
 				u.takeDamage(b.getDamage());
 				u.takeHit();
 				b.die();

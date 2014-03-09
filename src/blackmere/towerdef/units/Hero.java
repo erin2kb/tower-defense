@@ -11,15 +11,29 @@ import blackmere.towerdef.Movement;
 
 // TODO: consolidate hero and enemy code
 public class Hero extends Unit {
-	private final static int heroWidth = 62;
-	private final static int heroHeight = 52;
+	private final static int width = 62;	// rightmost spear point to leftmost spear point
+	private final static int height = 50;	// from tallest point of head to bottom of foot
+	private final static int offsetY = 11;	
+	private final static int targetWidth = 20;
+	private final static int targetHeight = 48;
+	private final static int targetOffsetX = 21;
+	private final static int targetOffsetY = 12;
+	private final static int motionWidth = 30;		// TODO: put constants in their own file??
+	private final static int motionHeight = 47;
+	private final static int motionOffsetX = 18;
+	private final static int motionOffsetY = 12;
+	private final static int attackWidth = 13;
+	private final static int attackHeight = 5;
+	private final static int attackOffsetXRight = 49;
+	private final static int attackOffsetXLeft = 0;
+	private final static int attackOffsetY = 40;
 	private final static int maxHP = 200;
 	private final static int damage = 10;
 	private final int numWalkFrames = 8;
 	private final int numAttackFrames = 8;
-	private final int walkDuration = 10000;		// 16000
-	private final int attackDuration = 10000;	// 26000
-	private final float speed = 0.003f;			// 0.001f
+	private final int walkDuration = 16000;		// 10000
+	private final int attackDuration = 26000;	// 10000
+	private final float speed = 0.001f;			// 0.003f
 	private final int delta = 150;
 	private final int attackDelay = 1100;		// TODO: consolidate delays?
 	private Image[] walkLeftFrames;
@@ -38,7 +52,7 @@ public class Hero extends Unit {
 	
 	// TODO: handle exceptions
 	public Hero(float startX, float startY) throws SlickException {
-		super(heroWidth, heroHeight, startX, startY, maxHP, damage);
+		super(startX, startY, maxHP, damage);
 		target = null;
 		facingRight = true;
 		
@@ -83,36 +97,39 @@ public class Hero extends Unit {
 	}
 	
 	public Rectangle getBoundingBox() {
-		return new Rectangle(x, y, width, height);
+		return new Rectangle(x, y + offsetY, width, height);
 	}
 	
-	// TODO: rename to getAttackBox()
-	public Rectangle getWeaponBox() {
-		return new Rectangle(x, y + 24, width, 12);	 // TODO: un-hard code
+	public Rectangle getAttackBox() {
+		int attackOffsetX = (facingRight ? attackOffsetXRight : attackOffsetXLeft);
+		return new Rectangle(x + attackOffsetX, y + attackOffsetY, attackWidth, attackHeight);
 	}
 	
 	public Rectangle getTargetBox() {
-		return new Rectangle(x + 8, y + 8, width - 16, height - 8);  // TODO: determine these exactly
+		return new Rectangle(x + targetOffsetX, y + targetOffsetY, targetWidth, targetHeight);
+	}
+	
+	public Rectangle getMotionBox() {
+		return new Rectangle(x + motionOffsetX, y + motionOffsetY, motionWidth, motionHeight);
 	}
 
 	private boolean safeToMove(Movement direction, ArrayList<Unit> units) {
-		float newX = x;
-		float newY = y;
+		Rectangle box = getMotionBox();	// use box for more realistic collision checking
+		float newX = box.getX();
+		float newY = box.getY();
 		
 		switch (direction) {
-		case UP:			// this equates to "UP || DOWN"
+		case UP:			// leaving this empty equates to "UP || DOWN"
 		case DOWN:
-			newY = y + delta * (direction == Movement.DOWN ? speed : -speed);
-			newX = x;
+			newY = newY + delta * (direction == Movement.DOWN ? speed : -speed);
 			break;
 		case LEFT:
 		case RIGHT:
-			newX = x + delta * (direction == Movement.RIGHT ? speed : -speed);
-			newY = y;
+			newX = newX + delta * (direction == Movement.RIGHT ? speed : -speed);
 			break;
 		}
 		
-		if (newX + width > rightBound || newX < leftBound || newY + height > downBound || newY < upBound) {
+		if (newX + box.getWidth() > rightBound || newX < leftBound || newY + box.getHeight() > downBound || newY < upBound) {
 			return false;
 		}
 
@@ -120,13 +137,16 @@ public class Hero extends Unit {
 			if (u instanceof Hero || u instanceof Bullet) {
 				// don't be blocked by heroes (i.e. itself) or bullets
 				continue;
-			} else if (detectCollision(newX, newY, u)) {
+			} else if (detectMotionCollision(u)) {
 				return false;
 			}
 		}
 
 		return true;
 	}
+	
+	// TODO: issue with 'sticky' collision checks (can't move if boxes brush each other even once)
+	// TODO: hero doesn't die properly
 	
 	// TODO: use doubles instead of floats throughout?
 	public void move(Movement direction, ArrayList<Unit> units) {
