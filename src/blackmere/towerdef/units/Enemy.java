@@ -18,16 +18,16 @@ public class Enemy extends Unit {
 	private final static int bulletTargetOffsetX = 24;
 	private final static int bulletTargetOffsetY = offsetY;
 	private final static int heroTargetWidth = 33;
-	private final static int heroTargetHeight = 30;
+	private final static int heroTargetHeight = 19;
 	private final static int heroTargetOffsetX = 18;
-	private final static int heroTargetOffsetY = offsetY;
-	private final static int motionWidth = 45;		// TODO: make sure hero can't step on enemy from behind to trap it [issue with 'sticky' collision checks?]
+	private final static int heroTargetOffsetY = 20;
+	private final static int motionWidth = 45;
 	private final static int motionHeight = 34;
-	private final static int motionOffsetX = 8;		// TODO: play with these values; bullets rarely visible when enemy right on top of tower
-	private final static int motionOffsetY = offsetY;	// TODO: consolidate offsetY's? consolidate vars with same value even if unrelated?
-	private final static int attackWidth = 12;
+	private final static int motionOffsetX = 8;		// TODO: play with these values; bullets rarely visible when enemy right on top of tower; enemy looks too far to attack hero; make sure it can still reach hero, though
+	private final static int motionOffsetY = offsetY;	// TODO: make var for each value, and stick them in another file for constants
+	private final static int attackWidth = 18;
 	private final static int attackHeight = 10;
-	private final static int attackOffsetX = 8;
+	private final static int attackOffsetX = 0;
 	private final static int attackOffsetY = 30;
 	private final static int maxHP = 160;
 	private final static int damage = 10;
@@ -95,18 +95,20 @@ public class Enemy extends Unit {
 	}
 	
 	// TODO: add logic for when enemy reaches left side of screen
+	// TODO: lanes; document: enemy 'invincible' when flashing red (test this)
+	// TODO: fix: make it so hero can't block enemy from moving unless enemy can attack hero
 	
 	// TODO: consolidate with hero??
 	private boolean safeToMove(ArrayList<Unit> units) {
-		Rectangle box = getBoundingBox();
+		Rectangle box = getMotionBox();
 		float newX = box.getX() - delta * speed;
-		float newY = box.getY();
+		Rectangle newBox = new Rectangle(newX, box.getY(), box.getWidth(), box.getHeight());
 		
 		for (Unit u : units) {
 			if (u instanceof Enemy || u instanceof Bullet) {
 				// don't be blocked by fellow enemies or by bullets
 				continue;
-			} else if (detectMotionCollision(u)) {
+			} else if (detectMotionCollision(newBox, u.getMotionBox())) {
 				return false;
 			}
 		}
@@ -126,20 +128,19 @@ public class Enemy extends Unit {
 			if (target.isDead() ||
 					(target instanceof Hero && !((Hero) target).withinRange(this)) ||
 					(target instanceof Tower && !((Tower) target).withinRange(this))) {
-				target = null;
+				target = null;		// TODO: figure out the if statement; document; repeat in hero if needed
 			}
 		}
 		
 		if (target == null) {
-			attack(units);	// find new target
+			attack(units);	// find new target; do in hero??
 		}
 		
 		if (target != null) {
 			long time = System.currentTimeMillis();
 			
 			if (time - lastAttackUpdate >= attackDelay) {
-				target.takeHit();
-				target.takeDamage(getDamage());
+				target.takeHit(getDamage());
 				lastAttackUpdate = time;
 			}
 		}

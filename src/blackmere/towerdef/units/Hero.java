@@ -14,9 +14,9 @@ public class Hero extends Unit {
 	private final static int width = 62;	// rightmost spear point to leftmost spear point
 	private final static int height = 50;	// from tallest point of head to bottom of foot
 	private final static int offsetY = 11;	
-	private final static int targetWidth = 20;
+	private final static int targetWidth = 26;
 	private final static int targetHeight = 48;
-	private final static int targetOffsetX = 21;
+	private final static int targetOffsetX = 18;
 	private final static int targetOffsetY = 12;
 	private final static int motionWidth = 30;		// TODO: put constants in their own file??
 	private final static int motionHeight = 47;
@@ -35,7 +35,7 @@ public class Hero extends Unit {
 	private final int attackDuration = 26000;	// 10000
 	private final float speed = 0.001f;			// 0.003f
 	private final int delta = 150;
-	private final int attackDelay = 1100;		// TODO: consolidate delays?
+	private final int attackDelay = 1100;		// TODO: consolidate delays? is this delay necessary?
 	private Image[] walkLeftFrames;
 	private Image[] attackLeftFrames;
 	private Image[] idleLeftFrames;
@@ -48,6 +48,7 @@ public class Hero extends Unit {
 	private Animation walkLeft, attackLeft, idleLeft, walkRight, attackRight, idleRight;
 	private boolean facingRight;
 	private Enemy target;
+	private Boolean damageDone;
 
 	
 	// TODO: handle exceptions
@@ -55,6 +56,7 @@ public class Hero extends Unit {
 		super(startX, startY, maxHP, damage);
 		target = null;
 		facingRight = true;
+		damageDone = false;
 		
 		walkLeftFrames = new Image[numWalkFrames];
 		attackLeftFrames = new Image[numAttackFrames];
@@ -132,21 +134,20 @@ public class Hero extends Unit {
 		if (newX + box.getWidth() > rightBound || newX < leftBound || newY + box.getHeight() > downBound || newY < upBound) {
 			return false;
 		}
+		
+		Rectangle newBox = new Rectangle(newX, newY, box.getWidth(), box.getHeight());
 
 		for (Unit u : units) {
 			if (u instanceof Hero || u instanceof Bullet) {
 				// don't be blocked by heroes (i.e. itself) or bullets
 				continue;
-			} else if (detectMotionCollision(u)) {
+			} else if (detectMotionCollision(newBox, u.getMotionBox())) {
 				return false;
 			}
 		}
 
 		return true;
 	}
-	
-	// TODO: issue with 'sticky' collision checks (can't move if boxes brush each other even once)
-	// TODO: hero doesn't die properly
 	
 	// TODO: use doubles instead of floats throughout?
 	public void move(Movement direction, ArrayList<Unit> units) {
@@ -185,7 +186,7 @@ public class Hero extends Unit {
 	}
 	
 	public void attack(ArrayList<Unit> units) {
-		sprite = (facingRight ? attackRight : attackLeft);	// TODO: always use getter/setter methods for unit fields?? [makes code longer]
+		sprite = (facingRight ? attackRight : attackLeft);	// TODO: cleanup unneeded getters/setters/checkers
 		sprite.stopAt(numAttackFrames - 1);
 		attacking = true;
 		lastAttackUpdate = System.currentTimeMillis();
@@ -197,35 +198,28 @@ public class Hero extends Unit {
 			}
 		}
 	}
-	
-	// TODO: diff weapon box dims based on direction facing??
-	
-	
+		
 	// TODO: move to unit??
 	public void checkAttack() {
 		if (target != null && target.isDead()) {
-			target = null;	// TODO: right spot for this?
-		}
-		
-		if (target != null) {
-			long time = System.currentTimeMillis();
-			
-			if (time - lastAttackUpdate >= attackDelay) {
-				target.takeHit();
-				// TODO: fix this part so it doesn't get called a million times
-			}
+			target = null;		// TODO: should this be in attack() or somewhere else instead?
 		}
 		
 		if (sprite.isStopped()) {
 			attacking = false;
+			damageDone = false;
 			sprite.restart();
-			idle();
-			
-			if (target != null) {
-				target.takeDamage(getDamage());		// TODO: optimize null checks
-			}
-			
+			idle();		// TODO: optimize null checks?
 			return;
+		}
+		
+		if (target != null && !damageDone && target.withinRange(this)) {
+			long time = System.currentTimeMillis();
+			
+			if (time - lastAttackUpdate >= attackDelay) {
+				target.takeHit(getDamage());
+				damageDone = true;
+			}
 		}
 		
 		sprite.update(delta);

@@ -39,6 +39,8 @@ public abstract class Unit {
 		sprite = s;
 	}
 	
+	// TODO: make enemy attack as soon as in range, rather than as soon as blocked [? - unsure of current behavior]
+	
 	public void draw(Graphics g) {
 		checkHit();
 		
@@ -49,7 +51,7 @@ public abstract class Unit {
 		}
 		
 		// DEBUG: draw a bounding box
-		Rectangle box = getAttackBox();
+		Rectangle box = (this instanceof Hero ? getAttackBox() : getTargetBox());
 		g.setColor(Color.red);
 		g.draw(box);
 	}
@@ -82,12 +84,11 @@ public abstract class Unit {
 		return dead;
 	}
 	
-	// TODO: necessary?
 	public boolean isAttacking() {
 		return attacking;
 	}
 	
-	public boolean isHit() {
+	public boolean isHit() {		// TODO: is this used?
 		return hit;
 	}
 	
@@ -99,8 +100,9 @@ public abstract class Unit {
 		}
 	}
 	
-	public void takeHit() {
+	public void takeHit(int damageAmount) {
 		hit = true;
+		takeDamage(damageAmount);	// TODO: consolidate?
 		lastHitUpdate = System.currentTimeMillis();
 	}
 	
@@ -119,12 +121,9 @@ public abstract class Unit {
 		currentHP -= damageAmount;
 	}
 	
-	// TODO: clean this up; diff. bound boxes for diff. cases; prevent 'stepping on' enemies from behind
-	// TODO: move to hero/enemy? since not used by tower/bullet
-	public boolean detectMotionCollision(Unit other) {
-		Rectangle box = getMotionBox();
-		Rectangle otherBox = other.getMotionBox();
-		
+	// TODO: move to hero/enemy? since not used by tower/bullet; rename??
+	// TODO: document that this gets called by the unit checking if it's safe to move
+	public boolean detectMotionCollision(Rectangle box, Rectangle otherBox) {	
 		if (box.intersects(otherBox)) {
 			return true;
 		} else {

@@ -82,8 +82,10 @@ public class GameManager extends BasicGame {
 			b.draw(arg1);
 		}
 		
-		// finally, draw the hero
-		activeHero.draw(arg1);		// TODO: document why passing in arg1 (for the sake of the DEBUG code for bounding boxes)
+		// finally, draw the hero, as long as they're currently alive
+		if (!activeHero.isDead()) {
+			activeHero.draw(arg1);		// TODO: document why passing in arg1 (for the sake of the DEBUG code for bounding boxes)
+		}
 	}
 	
 	//
@@ -102,7 +104,9 @@ public class GameManager extends BasicGame {
 			}
 		}
 
-		if (! activeHero.isAttacking()) {
+		if (activeHero.isDead()) {
+			return;		// don't do any more processing if hero is dead
+		} else if (! activeHero.isAttacking()) {
 			if (input.isKeyDown(Input.KEY_LEFT)) {
 				activeHero.move(Movement.LEFT, getActiveUnits());
 			} else if (input.isKeyDown(Input.KEY_RIGHT)) {
@@ -114,10 +118,10 @@ public class GameManager extends BasicGame {
 			} else if (input.isKeyDown(Input.KEY_SPACE)) {
 				activeHero.attack(getActiveUnits());
 			} else {
-				activeHero.idle();
+				activeHero.idle();		// TODO: switch statement?
 			}
 		} else {
-			// hero is attacking
+			// hero is alive and currently attacking
 			activeHero.checkAttack();
 		}
 	}
@@ -155,8 +159,7 @@ public class GameManager extends BasicGame {
 		
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Enemy && b.detectBulletCollision((Enemy) u)) {
-				u.takeDamage(b.getDamage());
-				u.takeHit();
+				u.takeHit(b.getDamage());
 				b.die();
 				return;
 			}
