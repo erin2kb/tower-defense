@@ -7,71 +7,40 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Movement;
+import blackmere.towerdef.util.Utility;
 
-public class Enemy extends Unit {
-	private final static int width = 62;
-	private final static int height = 45;
-	private final static int offsetY = 17;	// TODO: move all this logic to unit?? include offsetX, though 0 here (same for hero)
-	private final static int bulletTargetWidth = 30;
-	private final static int bulletTargetHeight = 30;
-	private final static int bulletTargetOffsetX = 24;
-	private final static int bulletTargetOffsetY = offsetY;
-	private final static int heroTargetWidth = 33;
-	private final static int heroTargetHeight = 19;
-	private final static int heroTargetOffsetX = 18;
-	private final static int heroTargetOffsetY = 20;
-	private final static int motionWidth = 45;
-	private final static int motionHeight = 34;
-	private final static int motionOffsetX = 8;		// TODO: play with these values; bullets rarely visible when enemy right on top of tower; enemy looks too far to attack hero; make sure it can still reach hero, though
-	private final static int motionOffsetY = offsetY;	// TODO: make var for each value, and stick them in another file for constants
-	private final static int attackWidth = 18;
-	private final static int attackHeight = 10;
-	private final static int attackOffsetX = 0;
-	private final static int attackOffsetY = 30;
-	private final static int maxHP = 160;
-	private final static int damage = 10;
-	private final int numWalkFrames = 8;
-	private final int numAttackFrames = 8;
-	private final int walkDuration = 16000;
-	private final int attackDuration = 26000;
-	private final float speed = 0.0004f;		// 0.0008f
-	private final int delta = 150;
-	private final int attackDelay = 3000;
-	private Image[] walkLeftFrames;
-	private Image[] attackLeftFrames;
-	private Image[] idleLeftFrames;
-	private int[] walkDurationArray;
-	private int[] attackDurationArray;
-	private int[] idleDurationArray;
+import static blackmere.towerdef.util.Constants.*;
+
+public class Enemy extends Troop {
+	private Image[] walkLeftFrames, attackLeftFrames, idleLeftFrames;
+	private int[] walkDurationArray, attackDurationArray, idleDurationArray;
 	private Animation walkLeft, attackLeft, idleLeft;
-	private Unit target;
 
 	
 	public Enemy(float startX, float startY) throws SlickException {
-		super(startX, startY, maxHP, damage);
+		super(startX, startY, enemyMaxHP, enemyDamage);
 		target = null;
 		
-		idleLeftFrames = new Image[1];
+		idleLeftFrames = new Image[enemyNumIdleFrames];
 		idleLeftFrames[0] = new Image("res/enemy/wl1.png");
-		idleDurationArray = new int[1];
-		idleDurationArray[0] = attackDuration;
+		idleDurationArray = new int[enemyNumIdleFrames];
+		idleDurationArray[0] = enemyIdleDuration;
 		
 		idleLeft = new Animation(idleLeftFrames, idleDurationArray, false);
 		setSprite(idleLeft);
 	}
 	
 	public Rectangle getBoundingBox() {
-		return new Rectangle(x, y + offsetY, width, height);
+		return new Rectangle(x + enemyOffsetX, y + enemyOffsetY, enemyWidth, enemyHeight);
 	}
 	
 	// TODO: consolidate w/ hero? also, consolidate all getBox f'ns?
 	public Rectangle getBulletTargetBox() {
-		return new Rectangle(x + bulletTargetOffsetX, y + bulletTargetOffsetY, bulletTargetWidth, bulletTargetHeight);
+		return new Rectangle(x + enemyTargetOffsetBulletX, y + enemyTargetOffsetBulletY, enemyTargetWidthBullet, enemyTargetHeightBullet);
 	}
 	
 	public Rectangle getHeroTargetBox() {
-		return new Rectangle(x + heroTargetOffsetX, y + heroTargetOffsetY, heroTargetWidth, heroTargetHeight);
+		return new Rectangle(x + enemyTargetOffsetHeroX, y + enemyTargetOffsetHeroY, enemyTargetWidthHero, enemyTargetHeightHero);
 	}
 	
 	// TODO: remove this temp f'n
@@ -80,11 +49,11 @@ public class Enemy extends Unit {
 	}
 	
 	public Rectangle getMotionBox() {
-		return new Rectangle(x + motionOffsetX, y + motionOffsetY, motionWidth, motionHeight);
+		return new Rectangle(x + enemyMotionOffsetX, y + enemyMotionOffsetY, enemyMotionWidth, enemyMotionHeight);
 	}
 	
 	public Rectangle getAttackBox() {
-		return new Rectangle(x + attackOffsetX, y + attackOffsetY, attackWidth, attackHeight);
+		return new Rectangle(x + enemyAttackOffsetX, y + enemyAttackOffsetY, enemyAttackWidth, enemyAttackHeight);
 	}
 	
 	public boolean withinRange(Hero h) {
@@ -95,70 +64,8 @@ public class Enemy extends Unit {
 	}
 	
 	// TODO: add logic for when enemy reaches left side of screen
-	// TODO: lanes; document: enemy 'invincible' when flashing red (test this)
+	// TODO: lanes (only detect collisions/tower fire if in lane)
+	// TODO: document: enemy 'invincible' when flashing red (test this)...
+	// TODO: ...or, change this behavior and reset flash on each hit (need to account for individual delay between bullet/hero so no instant-kills)
 	// TODO: fix: make it so hero can't block enemy from moving unless enemy can attack hero
-	
-	// TODO: consolidate with hero??
-	private boolean safeToMove(ArrayList<Unit> units) {
-		Rectangle box = getMotionBox();
-		float newX = box.getX() - delta * speed;
-		Rectangle newBox = new Rectangle(newX, box.getY(), box.getWidth(), box.getHeight());
-		
-		for (Unit u : units) {
-			if (u instanceof Enemy || u instanceof Bullet) {
-				// don't be blocked by fellow enemies or by bullets
-				continue;
-			} else if (detectMotionCollision(newBox, u.getMotionBox())) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-	
-	public void move(ArrayList<Unit> units) {
-		if (safeToMove(units)) {
-			x -= delta * speed;
-		}
-	}
-	
-	// TODO: consolidate
-	public void checkAttack(ArrayList<Unit> units) {		
-		if (target != null) {
-			if (target.isDead() ||
-					(target instanceof Hero && !((Hero) target).withinRange(this)) ||
-					(target instanceof Tower && !((Tower) target).withinRange(this))) {
-				target = null;		// TODO: figure out the if statement; document; repeat in hero if needed
-			}
-		}
-		
-		if (target == null) {
-			attack(units);	// find new target; do in hero??
-		}
-		
-		if (target != null) {
-			long time = System.currentTimeMillis();
-			
-			if (time - lastAttackUpdate >= attackDelay) {
-				target.takeHit(getDamage());
-				lastAttackUpdate = time;
-			}
-		}
-	}
-	
-	private void attack(ArrayList<Unit> units) {
-		for (Unit u : units) {
-			if (u instanceof Hero) {	// TODO: consolidate branches
-				if (((Hero) u).withinRange(this)) {
-					lastAttackUpdate = System.currentTimeMillis();
-					target = u;
-				}
-			} else if (u instanceof Tower) {
-				if (((Tower) u).withinRange(this)) {
-					lastAttackUpdate = System.currentTimeMillis();
-					target = u;
-				}
-			}
-		}
-	}
 }

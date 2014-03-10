@@ -4,6 +4,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+import static blackmere.towerdef.util.Constants.*;
 
 public abstract class Unit {
 	protected float x, y;
@@ -11,15 +12,10 @@ public abstract class Unit {
 	protected boolean dead, attacking, hit;
 	protected Animation sprite;
 	protected long lastHitUpdate, lastAttackUpdate;
-	protected final int rightBound = 600;
-	protected final int leftBound = 60;
-	protected final int upBound = 60;
-	protected final int downBound = 360;
-	protected final int hitDuration = 800;
 	
 	public Unit(float startX, float startY, int HP, int dmg) {
-		setX(startX);		// TODO: HP getter/setters?
-		setY(startY);
+		x = startX;
+		y = startY;
 		damage = dmg;
 		maxHP = HP;
 		currentHP = maxHP;
@@ -55,22 +51,6 @@ public abstract class Unit {
 		g.setColor(Color.red);
 		g.draw(box);
 	}
-
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
 	
 	public int getDamage() {
 		return damage;
@@ -88,10 +68,6 @@ public abstract class Unit {
 		return attacking;
 	}
 	
-	public boolean isHit() {		// TODO: is this used?
-		return hit;
-	}
-	
 	public void checkHit() {
 		long time = System.currentTimeMillis();		// TODO: optimize - use more reliable methods, like the nanoseconds one
 		
@@ -102,7 +78,7 @@ public abstract class Unit {
 	
 	public void takeHit(int damageAmount) {
 		hit = true;
-		takeDamage(damageAmount);	// TODO: consolidate?
+		currentHP -= damageAmount;
 		lastHitUpdate = System.currentTimeMillis();
 	}
 	
@@ -116,18 +92,4 @@ public abstract class Unit {
 	}
 	
 	// TODO: make background tiles 62x62 px
-	
-	public void takeDamage(int damageAmount) {
-		currentHP -= damageAmount;
-	}
-	
-	// TODO: move to hero/enemy? since not used by tower/bullet; rename??
-	// TODO: document that this gets called by the unit checking if it's safe to move
-	public boolean detectMotionCollision(Rectangle box, Rectangle otherBox) {	
-		if (box.intersects(otherBox)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }

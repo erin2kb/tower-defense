@@ -5,35 +5,30 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import blackmere.towerdef.util.Utility;
+
+import static blackmere.towerdef.util.Constants.*;
+
 public class Bullet extends Unit {
 
-	private final static int width = 20;
-	private final static int height = 10;
-	private final static int offsetX = 21;
-	private final static int offsetY = 26;
-	private final static int damage = 10;
-	private final float speed = 0.001f;		// 0.004f
-	private final int delta = 150;
-	private final int numAnimFrames = 1;
-	private final int animDuration = 26000;	// doesn't actually matter at this point, since there's only one frame in the animation
-	private Image[] animFrames;
-	private int[] animDurationArray;
-	private Animation anim;
+	private Image[] idleFrames;
+	private int[] idleDurationArray;
+	private Animation idle;
 
 	public Bullet(float startX, float startY) throws SlickException {
-		super(startX, startY, 10, damage);	// 10 is a dummy value, since bullets don't really have HP (it can be any number > 0)
+		super(startX, startY, bulletMaxHP, bulletDamage);
 		
-		animFrames = new Image[numAnimFrames];
-		animFrames[0] = new Image("res/bullet.png");
-		animDurationArray = new int[1];
-		animDurationArray[0] = animDuration;
+		idleFrames = new Image[bulletNumIdleFrames];
+		idleFrames[0] = new Image("res/bullet.png");
+		idleDurationArray = new int[1];
+		idleDurationArray[0] = bulletIdleDuration;
 		
-		anim = new Animation(animFrames, animDurationArray, false);
-		setSprite(anim);
+		idle = new Animation(idleFrames, idleDurationArray, false);
+		setSprite(idle);
 	}
 	
 	public Rectangle getBoundingBox() {
-		return new Rectangle(x + offsetX, y + offsetY, width, height);
+		return new Rectangle(x + bulletOffsetX, y + bulletOffsetY, bulletWidth, bulletHeight);
 	}
 	
 	public Rectangle getTargetBox() {
@@ -49,23 +44,18 @@ public class Bullet extends Unit {
 	}
 	
 	public void move() {
-		x += delta * speed;
+		x += bulletDelta * bulletSpeed;
 		
 		if (x > rightBound) {
-			// we went off the screen
+			// it went off the screen, so it's no longer in play
 			die();
 		}
 	}
 	
-	// TODO: consolidate with similar f'ns?
 	public boolean detectBulletCollision(Enemy e) {
 		Rectangle box = getBoundingBox();
 		Rectangle otherBox = e.getBulletTargetBox();
 		
-		if (box.intersects(otherBox)) {
-			return true;
-		} else {
-			return false;
-		}
+		return Utility.detectCollision(box, otherBox);
 	}
 }

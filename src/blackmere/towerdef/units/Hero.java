@@ -7,86 +7,55 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Movement;
+import blackmere.towerdef.util.Direction;
+import blackmere.towerdef.util.Utility;
+import static blackmere.towerdef.util.Constants.*;
 
 // TODO: consolidate hero and enemy code
-public class Hero extends Unit {
-	private final static int width = 62;	// rightmost spear point to leftmost spear point
-	private final static int height = 50;	// from tallest point of head to bottom of foot
-	private final static int offsetY = 11;	
-	private final static int targetWidth = 26;
-	private final static int targetHeight = 48;
-	private final static int targetOffsetX = 18;
-	private final static int targetOffsetY = 12;
-	private final static int motionWidth = 30;		// TODO: put constants in their own file??
-	private final static int motionHeight = 47;
-	private final static int motionOffsetX = 18;
-	private final static int motionOffsetY = 12;
-	private final static int attackWidth = 13;
-	private final static int attackHeight = 5;
-	private final static int attackOffsetXRight = 49;
-	private final static int attackOffsetXLeft = 0;
-	private final static int attackOffsetY = 40;
-	private final static int maxHP = 200;
-	private final static int damage = 10;
-	private final int numWalkFrames = 8;
-	private final int numAttackFrames = 8;
-	private final int walkDuration = 16000;		// 10000
-	private final int attackDuration = 26000;	// 10000
-	private final float speed = 0.001f;			// 0.003f
-	private final int delta = 150;
-	private final int attackDelay = 1100;		// TODO: consolidate delays? is this delay necessary?
-	private Image[] walkLeftFrames;
-	private Image[] attackLeftFrames;
-	private Image[] idleLeftFrames;
-	private Image[] walkRightFrames;
-	private Image[] attackRightFrames;
-	private Image[] idleRightFrames;
-	private int[] walkDurationArray;
-	private int[] attackDurationArray;
-	private int[] idleDurationArray;
+public class Hero extends Troop {
+	private Image[] walkLeftFrames, attackLeftFrames, idleLeftFrames, walkRightFrames, attackRightFrames, idleRightFrames;
+	private int[] walkDurationArray, attackDurationArray, idleDurationArray;
 	private Animation walkLeft, attackLeft, idleLeft, walkRight, attackRight, idleRight;
-	private boolean facingRight;
+	private boolean facingRight, damageDone;
 	private Enemy target;
-	private Boolean damageDone;
 
 	
 	// TODO: handle exceptions
 	public Hero(float startX, float startY) throws SlickException {
-		super(startX, startY, maxHP, damage);
+		super(startX, startY, heroMaxHP, heroDamage);
 		target = null;
 		facingRight = true;
 		damageDone = false;
 		
-		walkLeftFrames = new Image[numWalkFrames];
-		attackLeftFrames = new Image[numAttackFrames];
-		idleLeftFrames = new Image[1];
+		walkLeftFrames = new Image[heroNumWalkFrames];
+		attackLeftFrames = new Image[heroNumAttackFrames];
+		idleLeftFrames = new Image[heroNumIdleFrames];
 		idleLeftFrames[0] = new Image("res/hero/wl1.png");
-		walkRightFrames = new Image[numWalkFrames];
-		attackRightFrames = new Image[numAttackFrames];
-		idleRightFrames = new Image[1];
+		walkRightFrames = new Image[heroNumWalkFrames];
+		attackRightFrames = new Image[heroNumAttackFrames];
+		idleRightFrames = new Image[heroNumIdleFrames];
 		idleRightFrames[0] = new Image("res/hero/wr1.png");
-		walkDurationArray = new int[numWalkFrames];
-		attackDurationArray = new int[numAttackFrames];
-		idleDurationArray = new int[1];
-		idleDurationArray[0] = attackDuration;
+		walkDurationArray = new int[heroNumWalkFrames];
+		attackDurationArray = new int[heroNumAttackFrames];
+		idleDurationArray = new int[heroNumIdleFrames];
+		idleDurationArray[0] = heroIdleDuration;
 		
-		for (int i = 0; i < numWalkFrames; i++) {
+		for (int i = 0; i < heroNumWalkFrames; i++) {
 			int index = i + 1;
 			String leftName = "res/hero/wl" + index + ".png";
 			String rightName = "res/hero/wr" + index + ".png";
 			walkLeftFrames[i] = new Image(leftName);
 			walkRightFrames[i] = new Image(rightName);
-			walkDurationArray[i] = walkDuration;
+			walkDurationArray[i] = heroWalkDuration;
 		}
 		
-		for (int i = 0; i < numAttackFrames; i++) {
+		for (int i = 0; i < heroNumAttackFrames; i++) {
 			int index = i + 1;
 			String leftName = "res/hero/al" + index + ".png";
 			String rightName = "res/hero/ar" + index + ".png";
 			attackLeftFrames[i] = new Image(leftName);
 			attackRightFrames[i] = new Image(rightName);
-			attackDurationArray[i] = attackDuration;
+			attackDurationArray[i] = heroAttackDuration;
 		}
 		
 		walkLeft = new Animation(walkLeftFrames, walkDurationArray, false);
@@ -99,23 +68,23 @@ public class Hero extends Unit {
 	}
 	
 	public Rectangle getBoundingBox() {
-		return new Rectangle(x, y + offsetY, width, height);
+		return new Rectangle(x + heroOffsetX, y + heroOffsetY, heroWidth, heroHeight);
 	}
 	
 	public Rectangle getAttackBox() {
-		int attackOffsetX = (facingRight ? attackOffsetXRight : attackOffsetXLeft);
-		return new Rectangle(x + attackOffsetX, y + attackOffsetY, attackWidth, attackHeight);
+		int attackOffsetX = (facingRight ? heroAttackOffsetXRight : heroAttackOffsetXLeft);
+		return new Rectangle(x + attackOffsetX, y + heroAttackOffsetY, heroAttackWidth, heroAttackHeight);
 	}
 	
 	public Rectangle getTargetBox() {
-		return new Rectangle(x + targetOffsetX, y + targetOffsetY, targetWidth, targetHeight);
+		return new Rectangle(x + heroTargetOffsetX, y + heroTargetOffsetY, heroTargetWidth, heroTargetHeight);
 	}
 	
 	public Rectangle getMotionBox() {
-		return new Rectangle(x + motionOffsetX, y + motionOffsetY, motionWidth, motionHeight);
+		return new Rectangle(x + heroMotionOffsetX, y + heroMotionOffsetY, heroMotionWidth, heroMotionHeight);
 	}
 
-	private boolean safeToMove(Movement direction, ArrayList<Unit> units) {
+	private boolean safeToMove(Direction direction, ArrayList<Unit> units) {
 		Rectangle box = getMotionBox();	// use box for more realistic collision checking
 		float newX = box.getX();
 		float newY = box.getY();
@@ -123,11 +92,11 @@ public class Hero extends Unit {
 		switch (direction) {
 		case UP:			// leaving this empty equates to "UP || DOWN"
 		case DOWN:
-			newY = newY + delta * (direction == Movement.DOWN ? speed : -speed);
+			newY = newY + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
 			break;
 		case LEFT:
 		case RIGHT:
-			newX = newX + delta * (direction == Movement.RIGHT ? speed : -speed);
+			newX = newX + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
 			break;
 		}
 		
@@ -141,7 +110,7 @@ public class Hero extends Unit {
 			if (u instanceof Hero || u instanceof Bullet) {
 				// don't be blocked by heroes (i.e. itself) or bullets
 				continue;
-			} else if (detectMotionCollision(newBox, u.getMotionBox())) {
+			} else if (Utility.detectCollision(newBox, u.getMotionBox())) {
 				return false;
 			}
 		}
@@ -150,14 +119,14 @@ public class Hero extends Unit {
 	}
 	
 	// TODO: use doubles instead of floats throughout?
-	public void move(Movement direction, ArrayList<Unit> units) {
+	public void move(Direction direction, ArrayList<Unit> units) {
 		if (! safeToMove(direction, units)) {
 			// TODO: condense this function's switch statements if at all possible,
 			// while still allowing player to change direction even if blocked
 			switch(direction) {
 			case LEFT:
 			case RIGHT:
-				facingRight = (direction == Movement.RIGHT ? true : false);
+				facingRight = (direction == Direction.RIGHT ? true : false);
 				break;
 			}
 			idle();
@@ -167,27 +136,27 @@ public class Hero extends Unit {
 		switch(direction) {
 		case LEFT:
 		case RIGHT:
-			facingRight = (direction == Movement.RIGHT ? true : false);
-			x = x + delta * (direction == Movement.RIGHT ? speed : -speed);
+			facingRight = (direction == Direction.RIGHT ? true : false);
+			x = x + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
 			break;
 		case UP:
 		case DOWN:
-			y = y + delta * (direction == Movement.DOWN ? speed : -speed);
+			y = y + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
 			break;
 		}
 		
 		sprite = (facingRight ? walkRight : walkLeft);
-		sprite.update(delta);
+		sprite.update(heroDelta);
 	}
 	
 	public void idle() {
 		sprite = (facingRight ? idleRight : idleLeft);
-		sprite.update(delta);
+		sprite.update(heroDelta);
 	}
 	
 	public void attack(ArrayList<Unit> units) {
 		sprite = (facingRight ? attackRight : attackLeft);	// TODO: cleanup unneeded getters/setters/checkers
-		sprite.stopAt(numAttackFrames - 1);
+		sprite.stopAt(heroNumAttackFrames - 1);
 		attacking = true;
 		lastAttackUpdate = System.currentTimeMillis();
 		
@@ -216,13 +185,13 @@ public class Hero extends Unit {
 		if (target != null && !damageDone && target.withinRange(this)) {
 			long time = System.currentTimeMillis();
 			
-			if (time - lastAttackUpdate >= attackDelay) {
+			if (time - lastAttackUpdate >= heroAttackDelay) {
 				target.takeHit(getDamage());
 				damageDone = true;
 			}
 		}
 		
-		sprite.update(delta);
+		sprite.update(heroDelta);
 	}
 	
 	// TODO: consolidate with tower, and enemy if possible

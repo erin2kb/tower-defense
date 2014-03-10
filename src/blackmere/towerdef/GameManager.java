@@ -1,9 +1,5 @@
 package blackmere.towerdef;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
@@ -19,20 +15,16 @@ import blackmere.towerdef.units.Hero;
 import blackmere.towerdef.units.Tower;
 import blackmere.towerdef.units.Bullet;
 import blackmere.towerdef.units.Unit;
+import blackmere.towerdef.util.Direction;
+import static blackmere.towerdef.util.Constants.*;
 
 public class GameManager extends BasicGame {
 	
 	private TiledMap demoMap;
 	private ArrayList<Unit> allUnits;
 	private Hero activeHero;
-	private final float heroStartX = 180f;
-	private final float heroStartY = 240f;
-	private final float enemyStartX = 600f;
-	private final float enemyStartY = 120f;
-	private final float towerStartX = 60f;
-	private final float towerStartY = 120f;
 	
-
+	// constructor
 	public GameManager(String title) {
 		super(title);
 	}
@@ -93,7 +85,6 @@ public class GameManager extends BasicGame {
 			throws SlickException {
 		Input input = container.getInput();
 		
-		// TODO: optimize?
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Tower) {
 				towerLogic((Tower) u);
@@ -108,13 +99,13 @@ public class GameManager extends BasicGame {
 			return;		// don't do any more processing if hero is dead
 		} else if (! activeHero.isAttacking()) {
 			if (input.isKeyDown(Input.KEY_LEFT)) {
-				activeHero.move(Movement.LEFT, getActiveUnits());
+				activeHero.move(Direction.LEFT, getActiveUnits());
 			} else if (input.isKeyDown(Input.KEY_RIGHT)) {
-				activeHero.move(Movement.RIGHT, getActiveUnits());
+				activeHero.move(Direction.RIGHT, getActiveUnits());
 			} else if (input.isKeyDown(Input.KEY_UP)) {
-				activeHero.move(Movement.UP, getActiveUnits());
+				activeHero.move(Direction.UP, getActiveUnits());
 			} else if (input.isKeyDown(Input.KEY_DOWN)) {
-				activeHero.move(Movement.DOWN, getActiveUnits());
+				activeHero.move(Direction.DOWN, getActiveUnits());
 			} else if (input.isKeyDown(Input.KEY_SPACE)) {
 				activeHero.attack(getActiveUnits());
 			} else {
@@ -126,6 +117,7 @@ public class GameManager extends BasicGame {
 		}
 	}
 	
+	// TODO: documentation and comments
 	private ArrayList<Unit> getActiveUnits() {
 		ArrayList<Unit> activeUnits = new ArrayList<Unit>();
 		
@@ -170,7 +162,7 @@ public class GameManager extends BasicGame {
 	public static void main(String[] args) {
 		GameManager demoGame = new GameManager("Tower Defense Demo");
 		AppGameContainer gameContainer;
-		// TODO: redirect System.err to a log file
+		// TODO: redirect System.err to a log file; test these log files
 
 		try {
 			gameContainer = new AppGameContainer(demoGame);
@@ -179,7 +171,7 @@ public class GameManager extends BasicGame {
 			gameContainer.start();
 		} catch (SlickException e) {
 
-			File logFile = new File("logs/errors.log");
+			/*File logFile = new File("logs/errors.log");
 
 			if (! logFile.exists()) {
 				try {
@@ -210,7 +202,7 @@ public class GameManager extends BasicGame {
 				bw.close();
 			} catch (IOException e1) {
 				System.err.println("Error closing log file writers");
-			}
+			} */
 		} 
 	}
 }
