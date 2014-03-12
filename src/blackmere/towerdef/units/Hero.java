@@ -11,8 +11,8 @@ import blackmere.towerdef.util.Direction;
 import blackmere.towerdef.util.Utility;
 import static blackmere.towerdef.util.Constants.*;
 
-// TODO: consolidate hero and enemy code
-public class Hero extends Troop {
+// TODO: consolidate hero and enemy code, if possible
+public class Hero extends Unit {
 	private Image[] walkLeftFrames, attackLeftFrames, idleLeftFrames, walkRightFrames, attackRightFrames, idleRightFrames;
 	private int[] walkDurationArray, attackDurationArray, idleDurationArray;
 	private Animation walkLeft, attackLeft, idleLeft, walkRight, attackRight, idleRight;
@@ -83,9 +83,9 @@ public class Hero extends Troop {
 	public Rectangle getMotionBox() {
 		return new Rectangle(x + heroMotionOffsetX, y + heroMotionOffsetY, heroMotionWidth, heroMotionHeight);
 	}
-
+	
 	private boolean safeToMove(Direction direction, ArrayList<Unit> units) {
-		Rectangle box = getMotionBox();	// use box for more realistic collision checking
+		Rectangle box = getMotionBox();
 		float newX = box.getX();
 		float newY = box.getY();
 		
@@ -100,6 +100,7 @@ public class Hero extends Troop {
 			break;
 		}
 		
+		// don't let hero go outside of the screen
 		if (newX + box.getWidth() > rightBound || newX < leftBound || newY + box.getHeight() > downBound || newY < upBound) {
 			return false;
 		}
@@ -117,48 +118,34 @@ public class Hero extends Troop {
 
 		return true;
 	}
-	
+
 	// TODO: use doubles instead of floats throughout?
 	public void move(Direction direction, ArrayList<Unit> units) {
-		if (! safeToMove(direction, units)) {
-			// TODO: condense this function's switch statements if at all possible,
-			// while still allowing player to change direction even if blocked
-			switch(direction) {
-			case LEFT:
-			case RIGHT:
-				facingRight = (direction == Direction.RIGHT ? true : false);
-				break;
-			}
-			idle();
-			return;
-		}
-
 		switch(direction) {
 		case LEFT:
 		case RIGHT:
 			facingRight = (direction == Direction.RIGHT ? true : false);
-			x = x + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
+			if (safeToMove(direction, units)) {
+				x = x + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
+			}
 			break;
 		case UP:
 		case DOWN:
-			y = y + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
+			if (safeToMove(direction, units)) {
+				y = y + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
+			}
 			break;
 		}
-		
+
 		sprite = (facingRight ? walkRight : walkLeft);
-		sprite.update(heroDelta);
-	}
-	
-	public void idle() {
-		sprite = (facingRight ? idleRight : idleLeft);
-		sprite.update(heroDelta);
+		sprite.update(animationDelta);
 	}
 	
 	public void attack(ArrayList<Unit> units) {
-		sprite = (facingRight ? attackRight : attackLeft);	// TODO: cleanup unneeded getters/setters/checkers
+		sprite = (facingRight ? attackRight : attackLeft);
 		sprite.stopAt(heroNumAttackFrames - 1);
 		attacking = true;
-		lastAttackUpdate = System.currentTimeMillis();
+		lastAttackUpdate = System.currentTimeMillis();	// TODO: document differences b/w this f'n and enemy ver. of this f'n
 		
 		for (Unit u : units) {
 			if (u instanceof Enemy && ((Enemy) u).withinRange(this)) {
@@ -167,18 +154,17 @@ public class Hero extends Troop {
 			}
 		}
 	}
-		
-	// TODO: move to unit??
+	
 	public void checkAttack() {
 		if (target != null && target.isDead()) {
-			target = null;		// TODO: should this be in attack() or somewhere else instead?
+			target = null;
 		}
 		
 		if (sprite.isStopped()) {
 			attacking = false;
 			damageDone = false;
 			sprite.restart();
-			idle();		// TODO: optimize null checks?
+			idle();
 			return;
 		}
 		
@@ -191,14 +177,14 @@ public class Hero extends Troop {
 			}
 		}
 		
-		sprite.update(heroDelta);
+		sprite.update(animationDelta);
 	}
 	
-	// TODO: consolidate with tower, and enemy if possible
-	public boolean withinRange(Enemy e) {
-		Rectangle box = getTargetBox();
-		Rectangle otherBox = e.getAttackBox();
-		
-		return box.intersects(otherBox);
+	// TODO: check all access levels (protected, etc.)
+	
+	// TODO: move to Unit??
+	public void idle() {
+		sprite = (facingRight ? idleRight : idleLeft);
+		sprite.update(heroDelta);
 	}
 }

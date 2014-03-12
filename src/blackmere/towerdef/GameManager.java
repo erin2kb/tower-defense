@@ -31,7 +31,7 @@ public class GameManager extends BasicGame {
 	
 	//
 	public void init(GameContainer container) throws SlickException {
-		demoMap = new TiledMap("res/demoMap.tmx");
+		demoMap = new TiledMap("res/basicMap.tmx");
 		activeHero = new Hero(heroStartX, heroStartY);
 		allUnits = new ArrayList<Unit>();
 		allUnits.add(activeHero);
@@ -109,7 +109,7 @@ public class GameManager extends BasicGame {
 			} else if (input.isKeyDown(Input.KEY_SPACE)) {
 				activeHero.attack(getActiveUnits());
 			} else {
-				activeHero.idle();		// TODO: switch statement?
+				activeHero.idle();
 			}
 		} else {
 			// hero is alive and currently attacking
@@ -132,10 +132,8 @@ public class GameManager extends BasicGame {
 	
 	private void towerLogic(Tower t) throws SlickException {
 		for (Unit u : getActiveUnits()) {
-			if (u instanceof Enemy) {
-				if (t.timeToFire()) {
-					allUnits.add(t.getBullet());
-				}
+			if (u instanceof Enemy && u.getLane() == t.getLane() && t.timeToFire()) {
+				allUnits.add(t.getBullet());
 				return;		// TODO: find a better way
 			}
 		}
@@ -166,7 +164,7 @@ public class GameManager extends BasicGame {
 
 		try {
 			gameContainer = new AppGameContainer(demoGame);
-			gameContainer.setDisplayMode(660, 420, false);
+			gameContainer.setDisplayMode(windowWidth, windowHeight, false);
 			gameContainer.setShowFPS(false);
 			gameContainer.start();
 		} catch (SlickException e) {

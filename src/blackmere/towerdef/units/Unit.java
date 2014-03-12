@@ -35,8 +35,6 @@ public abstract class Unit {
 		sprite = s;
 	}
 	
-	// TODO: make enemy attack as soon as in range, rather than as soon as blocked [? - unsure of current behavior]
-	
 	public void draw(Graphics g) {
 		checkHit();
 		
@@ -45,15 +43,19 @@ public abstract class Unit {
 		} else {
 			sprite.draw((int) x, (int) y);
 		}
-		
+				
 		// DEBUG: draw a bounding box
-		Rectangle box = (this instanceof Hero ? getAttackBox() : getTargetBox());
+		/*Rectangle box = (this instanceof Enemy ? getAttackBox() : getBoundingBox());
 		g.setColor(Color.red);
-		g.draw(box);
+		g.draw(box); */
 	}
 	
 	public int getDamage() {
 		return damage;
+	}
+	
+	public int getLane() {
+		return (int) Math.floor((y - 1) / tileSize);
 	}
 	
 	public void die() {
@@ -91,5 +93,10 @@ public abstract class Unit {
 		}
 	}
 	
-	// TODO: make background tiles 62x62 px
+	public boolean withinRange(Unit u) {
+		Rectangle box = getTargetBox();
+		Rectangle otherBox = u.getAttackBox();		// TODO: ensure this can't be called on units without an attackbox?
+		
+		return box.intersects(otherBox);
+	}
 }

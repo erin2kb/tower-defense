@@ -1,23 +1,29 @@
 package blackmere.towerdef.util;
 
 // TODO: note that this method isn't the best security-wise; a better solution
-// would be to have a Constants file for each individual class/family
+// would be to have a Constants file for each individual class/family [maybe??]
 public class Constants {
 	
+	// TODO: remove unused resources from res folder
+	
 	// Constants used by GameManager
-	public final static float heroStartX = 180f;
-	public final static float heroStartY = 240f;
-	public final static float enemyStartX = 600f;
-	public final static float enemyStartY = 120f;
-	public final static float towerStartX = 60f;
-	public final static float towerStartY = 120f;
+	public final static float heroStartX = 186f;
+	public final static float heroStartY = 248f;
+	public final static float enemyStartX = 620f;
+	public final static float enemyStartY = 248f;
+	public final static float towerStartX = 62f;
+	public final static float towerStartY = 124f;
+	public final static int windowWidth = 682;
+	public final static int windowHeight = 434;
 	
 	// Constants used by Unit
-	public final static int rightBound = 600;
-	public final static int leftBound = 60;
-	public final static int upBound = 60;
-	public final static int downBound = 360;
+	public final static int tileSize = 62;
+	public final static int rightBound = 620;
+	public final static int leftBound = 62;
+	public final static int upBound = 62;
+	public final static int downBound = 372;
 	public final static int hitDuration = 800;
+	public final static int animationDelta = 150;	// currently used by all animations
 	
 	// Constants used by Hero
 	public final static int heroWidth = 62;	// rightmost spear point to leftmost spear point
@@ -28,7 +34,7 @@ public class Constants {
 	public final static int heroTargetHeight = 48;
 	public final static int heroTargetOffsetX = 18;
 	public final static int heroTargetOffsetY = 12;
-	public final static int heroMotionWidth = 30;		// TODO: put constants in their own file??
+	public final static int heroMotionWidth = 30;
 	public final static int heroMotionHeight = 47;
 	public final static int heroMotionOffsetX = 18;
 	public final static int heroMotionOffsetY = 12;
@@ -46,7 +52,7 @@ public class Constants {
 	public final static int heroMaxHP = 200;
 	public final static int heroDamage = 10;
 	public final static float heroSpeed = 0.001f;			// 0.003f
-	public final static int heroDelta = 150;		// TODO: consolidate deltas?
+	public final static int heroDelta = 150;		// TODO: consolidate deltas? document purpose of this delta
 	public final static int heroAttackDelay = 1100;		// TODO: consolidate delays? is this delay correct/necessary?
 	
 	// Constants used by Enemy
@@ -63,18 +69,18 @@ public class Constants {
 	public final static int enemyTargetOffsetHeroX = 18;
 	public final static int enemyTargetOffsetHeroY = 20;
 	public final static int enemyMotionWidth = 45;
-	public final static int enemyMotionHeight = 34;
+	public final static int enemyMotionHeight = 30;
 	public final static int enemyMotionOffsetX = 8;	// TODO: play with these values; bullets rarely visible when enemy right on top of tower; enemy looks too far to attack hero; make sure it can still reach hero, though
 	public final static int enemyMotionOffsetY = enemyOffsetY;
 	public final static int enemyAttackWidth = 18;
-	public final static int enemyAttackHeight = 10;
+	public final static int enemyAttackHeight = 40;
 	public final static int enemyAttackOffsetX = 0;
-	public final static int enemyAttackOffsetY = 30;
+	public final static int enemyAttackOffsetY = 10;
 	public final static int enemyNumIdleFrames = 1;
 	public final static int enemyNumWalkFrames = 8;
 	public final static int enemyNumAttackFrames = 8;
 	public final static int enemyIdleDuration = 26000;	// doesn't actually matter at this point, since there's only one frame in the animation
-	public final static int enemyWalkDuration = 16000;	// if same across all units, then consolidate (check for other consolidation opportunities too)
+	public final static int enemyWalkDuration = 16000;	// TODO: if same across all units, then consolidate (check for other consolidation opportunities too)
 	public final static int enemyAttackDuration = 26000;
 	public final static int enemyMaxHP = 160;
 	public final static int enemyDamage = 10;
@@ -103,6 +109,6 @@ public class Constants {
 	public final static int bulletIdleDuration = 26000;	// doesn't actually matter at this point, since there's only one frame in the animation
 	public final static int bulletMaxHP = 10;	// 10 is a dummy value, since bullets don't really have HP (it can be any number > 0)
 	public final static int bulletDamage = 10;
-	public final static float bulletSpeed = 0.001f;		// 0.004f
+	public final static float bulletSpeed = 0.0006f;		// 0.001f
 	public final static int bulletDelta = 150;
 }

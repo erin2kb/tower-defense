@@ -11,11 +11,11 @@ import blackmere.towerdef.util.Utility;
 
 import static blackmere.towerdef.util.Constants.*;
 
-public class Enemy extends Troop {
+public class Enemy extends Unit {
 	private Image[] walkLeftFrames, attackLeftFrames, idleLeftFrames;
 	private int[] walkDurationArray, attackDurationArray, idleDurationArray;
 	private Animation walkLeft, attackLeft, idleLeft;
-
+	private Unit target;
 	
 	public Enemy(float startX, float startY) throws SlickException {
 		super(startX, startY, enemyMaxHP, enemyDamage);
@@ -34,7 +34,7 @@ public class Enemy extends Troop {
 		return new Rectangle(x + enemyOffsetX, y + enemyOffsetY, enemyWidth, enemyHeight);
 	}
 	
-	// TODO: consolidate w/ hero? also, consolidate all getBox f'ns?
+	// TODO: consolidate all getBox f'ns?
 	public Rectangle getBulletTargetBox() {
 		return new Rectangle(x + enemyTargetOffsetBulletX, y + enemyTargetOffsetBulletY, enemyTargetWidthBullet, enemyTargetHeightBullet);
 	}
@@ -43,7 +43,7 @@ public class Enemy extends Troop {
 		return new Rectangle(x + enemyTargetOffsetHeroX, y + enemyTargetOffsetHeroY, enemyTargetWidthHero, enemyTargetHeightHero);
 	}
 	
-	// TODO: remove this temp f'n
+	// TODO: document the reason for this
 	public Rectangle getTargetBox() {
 		return getHeroTargetBox();
 	}
@@ -56,16 +56,67 @@ public class Enemy extends Troop {
 		return new Rectangle(x + enemyAttackOffsetX, y + enemyAttackOffsetY, enemyAttackWidth, enemyAttackHeight);
 	}
 	
-	public boolean withinRange(Hero h) {
-		Rectangle box = getHeroTargetBox();
-		Rectangle otherBox = h.getAttackBox();
+	protected boolean safeToMove(ArrayList<Unit> units) {
+		Rectangle box = getMotionBox();
+		float newX = box.getX() - enemyDelta * enemySpeed;
+		Rectangle newBox = new Rectangle(newX, box.getY(), box.getWidth(), box.getHeight());
 		
-		return box.intersects(otherBox);
+		for (Unit u : units) {
+			if (u instanceof Enemy || u instanceof Bullet) {
+				// don't be blocked by fellow enemies or by bullets
+				continue;
+			} else if (Utility.detectCollision(newBox, u.getMotionBox())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	public void move(ArrayList<Unit> units) {
+		if (safeToMove(units) && !attacking) {
+			x -= enemyDelta * enemySpeed;
+		}
+	}
+	
+	private void attack(ArrayList<Unit> units) {
+		for (Unit u : units) {
+			if ((u instanceof Hero && ((Hero) u).withinRange(this)) || 
+					(u instanceof Tower && ((Tower) u).withinRange(this))) {
+				lastAttackUpdate = System.currentTimeMillis();
+				attacking = true;
+				target = u;
+			} 
+		}
+	}
+	
+	public void checkAttack(ArrayList<Unit> units) {		
+		if (target != null) {
+			if (target.isDead() ||
+					(target instanceof Hero && !((Hero) target).withinRange(this)) ||
+					(target instanceof Tower && !((Tower) target).withinRange(this))) {
+				target = null;		// TODO: figure out the if statement; document; repeat in hero if needed
+				attacking = false;
+			}
+		}
+		
+		if (target == null) {
+			attack(units);	// find new target; do in hero?? consolidate with hero??? make so it doesn't get called so much??
+		}
+		
+		if (target != null) {
+			long time = System.currentTimeMillis();
+			
+			if (time - lastAttackUpdate >= enemyAttackDelay) {
+				target.takeHit(getDamage());
+				lastAttackUpdate = time;
+			}
+		}
 	}
 	
 	// TODO: add logic for when enemy reaches left side of screen
-	// TODO: lanes (only detect collisions/tower fire if in lane)
+	// TODO: lanes (only detect collisions if in lane) -- need to reconsider this in order to use for enemies (since heroes not confined to lanes, but still need to be attacked)
 	// TODO: document: enemy 'invincible' when flashing red (test this)...
 	// TODO: ...or, change this behavior and reset flash on each hit (need to account for individual delay between bullet/hero so no instant-kills)
-	// TODO: fix: make it so hero can't block enemy from moving unless enemy can attack hero
+	// TODO: fix: make it so hero can't block enemy from moving unless enemy can attack hero (inc. for bee/ladybug too)
 }

@@ -64,13 +64,4 @@ public class Tower extends Unit {
 	public Bullet getBullet() throws SlickException {
 		return new Bullet(x + towerBulletSpawnOffset, y);
 	}
-
-	// TODO: consolidate with hero, and enemy if possible
-	public boolean withinRange(Enemy e) {
-		Rectangle box = getTargetBox();
-		Rectangle otherBox = e.getAttackBox();
-
-		return box.intersects(otherBox);
-	}
-
 }
