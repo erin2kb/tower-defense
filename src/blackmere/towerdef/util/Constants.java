@@ -6,7 +6,7 @@ public class Constants {
 	
 	// TODO: remove unused resources from res folder
 	
-	// Constants used by GameManager
+	// Constants used by GameManager and other top-level classes (such as "Demo")
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;
@@ -15,6 +15,8 @@ public class Constants {
 	public final static float towerStartY = 124f;
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
+	public final static int demoID = 0;		// state ID for the 'demo' state
+	public final static int pauseID = 1;
 	
 	// Constants used by Unit
 	public final static int tileSize = 62;
@@ -30,7 +32,7 @@ public class Constants {
 	public final static int heroHeight = 50;	// from tallest point of head to bottom of foot
 	public final static int heroOffsetX = 0;
 	public final static int heroOffsetY = 11;	
-	public final static int heroTargetWidth = 26;
+	public final static int heroTargetWidth = 24;
 	public final static int heroTargetHeight = 48;
 	public final static int heroTargetOffsetX = 18;
 	public final static int heroTargetOffsetY = 12;
@@ -55,19 +57,21 @@ public class Constants {
 	public final static int heroDelta = 150;		// TODO: consolidate deltas? document purpose of this delta
 	public final static int heroAttackDelay = 1100;		// TODO: consolidate delays? is this delay correct/necessary?
 	
+	// TODO: adjust boxes so that when hero stays still (and enemy comes), hero attack looks like it's properly hitting the enemy
+	
 	// Constants used by Enemy
 	public final static int enemyWidth = 62;
 	public final static int enemyHeight = 45;
 	public final static int enemyOffsetX = 0;
-	public final static int enemyOffsetY = 17;
+	public final static int enemyOffsetY = 18;
 	public final static int enemyTargetWidthBullet = 30;
 	public final static int enemyTargetHeightBullet = 30;
 	public final static int enemyTargetOffsetBulletX = 24;
 	public final static int enemyTargetOffsetBulletY = enemyOffsetY;
 	public final static int enemyTargetWidthHero = 33;
-	public final static int enemyTargetHeightHero = 19;
+	public final static int enemyTargetHeightHero = 20;
 	public final static int enemyTargetOffsetHeroX = 18;
-	public final static int enemyTargetOffsetHeroY = 20;
+	public final static int enemyTargetOffsetHeroY = 21;
 	public final static int enemyMotionWidth = 45;
 	public final static int enemyMotionHeight = 30;
 	public final static int enemyMotionOffsetX = 8;	// TODO: play with these values; bullets rarely visible when enemy right on top of tower; enemy looks too far to attack hero; make sure it can still reach hero, though
@@ -75,7 +79,7 @@ public class Constants {
 	public final static int enemyAttackWidth = 18;
 	public final static int enemyAttackHeight = 40;
 	public final static int enemyAttackOffsetX = 0;
-	public final static int enemyAttackOffsetY = 10;
+	public final static int enemyAttackOffsetY = 11;
 	public final static int enemyNumIdleFrames = 1;
 	public final static int enemyNumWalkFrames = 8;
 	public final static int enemyNumAttackFrames = 8;

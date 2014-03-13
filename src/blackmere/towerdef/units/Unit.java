@@ -45,7 +45,7 @@ public abstract class Unit {
 		}
 				
 		// DEBUG: draw a bounding box
-		/*Rectangle box = (this instanceof Enemy ? getAttackBox() : getBoundingBox());
+		/*Rectangle box = (this instanceof Hero ? getAttackBox() : getTargetBox());
 		g.setColor(Color.red);
 		g.draw(box); */
 	}
