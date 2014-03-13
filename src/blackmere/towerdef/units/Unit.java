@@ -54,6 +54,14 @@ public abstract class Unit {
 		return damage;
 	}
 	
+	public int getHP() {
+		return currentHP;
+	}
+	
+	public int getMaxHP() {
+		return maxHP;
+	}
+	
 	public int getLane() {
 		return (int) Math.floor((y - 1) / tileSize);
 	}

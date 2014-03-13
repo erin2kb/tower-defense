@@ -7,16 +7,19 @@ public class Constants {
 	// TODO: remove unused resources from res folder
 	
 	// Constants used by GameManager and other top-level classes (such as "Demo")
+	public final static int demoID = 0;		// state ID for the 'demo' state
+	public final static int pauseID = 1;
+	public final static int windowWidth = 682;
+	public final static int windowHeight = 434;
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;
 	public final static float enemyStartY = 248f;
 	public final static float towerStartX = 62f;
 	public final static float towerStartY = 124f;
-	public final static int windowWidth = 682;
-	public final static int windowHeight = 434;
-	public final static int demoID = 0;		// state ID for the 'demo' state
-	public final static int pauseID = 1;
+	public final static int HPTextXPos = 20;
+	public final static int HPTextYPos = windowHeight - 34;
+	public final static int HPTextOffset = 30;
 	
 	// Constants used by Unit
 	public final static int tileSize = 62;

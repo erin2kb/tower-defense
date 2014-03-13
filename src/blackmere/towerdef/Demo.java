@@ -2,6 +2,7 @@ package blackmere.towerdef;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -40,11 +41,32 @@ public class Demo extends BasicGameState {
 	//
 	public void render(GameContainer container, StateBasedGame manager, Graphics g) throws SlickException {
 		demoMap.render(0, 0);
+		
+		// draw the current HP
+		g.setColor(Color.black);
+		g.drawString("HP:", HPTextXPos, HPTextYPos);
+			
+		double currentHP = activeHero.getHP();
+		double maxHP = activeHero.getMaxHP();
+		double thirdHP = maxHP / 3;
+		
+		// TODO: keep position static even when going b/w triple and double digits
+		if (currentHP > thirdHP * 2) {
+			g.setColor(Color.blue);		// TODO: make green? (but dark enough to see)
+		} else if (currentHP <= thirdHP) {
+			g.setColor(Color.red);
+		} else {
+			g.setColor(Color.magenta);	// TODO: should be yellow?
+		}
+		
+		g.drawString((int) currentHP + "/" + (int) maxHP, HPTextXPos + HPTextOffset, HPTextYPos);
+		
+		
+		// divide units into lists according to type
 		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 		ArrayList<Tower> towers = new ArrayList<Tower>();
 		
-		// divide units into lists according to type
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Bullet) {
 				bullets.add((Bullet) u);
