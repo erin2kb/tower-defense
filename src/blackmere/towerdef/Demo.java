@@ -8,16 +8,19 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
+import blackmere.towerdef.ui.Button;
 import blackmere.towerdef.units.Enemy;
 import blackmere.towerdef.units.Hero;
 import blackmere.towerdef.units.Tower;
 import blackmere.towerdef.units.Bullet;
 import blackmere.towerdef.units.Unit;
 import blackmere.towerdef.util.Direction;
+import blackmere.towerdef.util.Utility;
 import static blackmere.towerdef.util.Constants.*;
 
 public class Demo extends BasicGameState {
@@ -25,27 +28,49 @@ public class Demo extends BasicGameState {
 	private StateBasedGame gameManager;
 	private TiledMap demoMap;
 	private ArrayList<Unit> allUnits;
+	private ArrayList<Button> buttons;
 	private Hero activeHero;
+	private int currentEnergy;
+	private boolean buildMode;
 		
 	//
 	public void init(GameContainer container, StateBasedGame manager) throws SlickException {
 		gameManager = manager;
 		demoMap = new TiledMap("res/basicMap.tmx");
+		currentEnergy = initialEnergy;
+		buildMode = false;
 		activeHero = new Hero(heroStartX, heroStartY);
 		allUnits = new ArrayList<Unit>();
 		allUnits.add(activeHero);
 		allUnits.add(new Enemy(enemyStartX, enemyStartY));
 		allUnits.add(new Tower(towerStartX, towerStartY));
+		buttons = new ArrayList<Button>();
+		Image towerButtonImage = new Image("res/towerButton.png");
+		Button towerButton = new Button(towerButtonImage, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
+		buttons.add(towerButton);
 	}
 
 	//
 	public void render(GameContainer container, StateBasedGame manager, Graphics g) throws SlickException {
 		demoMap.render(0, 0);
 		
-		// draw the current HP
+		// draw the UI text elements
 		g.setColor(Color.black);
+		g.drawString("Dream Energy: ", resTextXPos, resTextYPos);
 		g.drawString("HP:", HPTextXPos, HPTextYPos);
-			
+		
+		// draw the current resource amount
+		if (currentEnergy < cheapestTowerCost) {
+			g.setColor(Color.red);
+		} else if (currentEnergy < 2 * cheapestTowerCost) {
+			g.setColor(Color.magenta);
+		} else {
+			g.setColor(Color.blue);
+		}
+		
+		g.drawString("" + currentEnergy, resTextXPos + resTextOffset, resTextYPos);	// TODO: consolidate w/ HP text?
+		
+		// draw the current HP	
 		double currentHP = activeHero.getHP();
 		double maxHP = activeHero.getMaxHP();
 		double thirdHP = maxHP / 3;
@@ -59,8 +84,14 @@ public class Demo extends BasicGameState {
 			g.setColor(Color.magenta);	// TODO: should be yellow?
 		}
 		
+		// TODO: potential minor issues with pausing during red flash (cancels flash delay??)
+		
 		g.drawString((int) currentHP + "/" + (int) maxHP, HPTextXPos + HPTextOffset, HPTextYPos);
 		
+		// draw the UI buttons
+		for (Button b : buttons) {
+			b.draw(g);
+		}
 		
 		// divide units into lists according to type
 		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -164,6 +195,10 @@ public class Demo extends BasicGameState {
 				return;		// TODO: find a better way
 			}
 		}
+		
+		if (t.timeToGenerate()) {
+			currentEnergy += t.getEnergy();
+		}
 	}
 	
 	private void enemyLogic(Enemy e) {
@@ -182,6 +217,60 @@ public class Demo extends BasicGameState {
 			}
 		}
 	}
+	
+	// TODO: reduce enemy hit duration so it can die faster if under heavy attack?
+	
+	// override of InputListener interface method
+	public void mouseClicked(int button, int x, int y, int count) {
+		// TODO: process UI clicks first
+		if (buttons.get(0).getBoundingBox().contains(x, y)) {
+			buildMode = !buildMode;
+			buttons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
+			return;		// so we don't build a tower on top of the button; TODO: consolidate with branch below?
+		}
+		
+		if (!buildMode) {
+			return;		// don't process clicks unless we're building
+		}
+		
+		// process battlefield clicks
+		if (currentEnergy < towerCostBlue) {	// TODO: get cost from object
+			return;		// TODO: give better indication of 'can't afford', i.e. res amt flash red w/ sound effect
+		}
+		
+		int towerX = (x / tileSize) * tileSize;	// first divide to round off and get the column number, then multiply to get the starting x-value for that column
+		int towerY = (y / tileSize) * tileSize;	// TODO: is there a mathematically 'better' way to achieve this?
+		Tower t = null;
+		
+		try {
+			t = new Tower(towerX, towerY);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (t == null) {
+			return;
+		}
+		
+		Rectangle box = t.getBoundingBox();		// TODO: use motionbox instead??
+		
+		for (Unit u : getActiveUnits()) {
+			if (u instanceof Bullet) {
+				// don't be blocked by bullets
+				continue;
+			} else if (Utility.detectCollision(box, u.getMotionBox())) {
+				return;
+			}
+		}
+		
+		// if we get here, there were no collisions, so make the tower 'official'
+		currentEnergy -= t.getCost();
+		allUnits.add(t);
+	}
+	
+	// TODO: allow towers to be built 'on top' of enemies to a reasonable extent, as in PvZ
+	// TODO: allow hero to walk over top of towers?
 
 	//
 	public int getID() {

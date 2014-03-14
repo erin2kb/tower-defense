@@ -12,11 +12,14 @@ public class Tower extends Unit {
 	private Image[] idleFrames;
 	private int[] idleDurationArray;
 	private Animation idle;
-	private long lastShotFired;
+	private long lastShotFired, lastEnergyGen;
+	private int buildCost, energyRate;
 
 	public Tower(float startX, float startY) throws SlickException {
 		super(startX, startY, towerMaxHP, towerDamage);
 		lastShotFired = 0;
+		buildCost = towerCostBlue;
+		energyRate = energyRateBlue;
 		
 		idleFrames = new Image[towerNumIdleFrames];
 		idleFrames[0] = new Image("res/tower.png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
@@ -49,11 +52,35 @@ public class Tower extends Unit {
 		lastShotFired = timestamp;
 	}
 	
+	private void generate(long timestamp) {
+		lastEnergyGen = timestamp;
+	}
+	
+	public int getCost() {
+		return buildCost;
+	}
+	
+	public int getEnergy() {
+		return energyRate;
+	}
+	
 	public boolean timeToFire() {
 		long time = System.currentTimeMillis();
 		
 		if (time - lastShotFired >= towerAttackDelay) {
 			fire(time);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// TODO: consolidate with timeToFire?
+	public boolean timeToGenerate() {
+		long time = System.currentTimeMillis();
+		
+		if (time - lastEnergyGen >= towerGenDelay) {
+			generate(time);
 			return true;
 		} else {
 			return false;

@@ -11,18 +11,26 @@ public class Constants {
 	public final static int pauseID = 1;
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
+	public final static int tileSize = 62;
+	public final static int initialEnergy = 200;
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;
 	public final static float enemyStartY = 248f;
 	public final static float towerStartX = 62f;
 	public final static float towerStartY = 124f;
-	public final static int HPTextXPos = 20;
+	public final static int resTextXPos = 20;
+	public final static int resTextYPos = 20;
+	public final static int resTextOffset = 120;
+	public final static int HPTextXPos = resTextXPos;
 	public final static int HPTextYPos = windowHeight - 34;
-	public final static int HPTextOffset = 30;
+	public final static int HPTextOffset = 30;		// TODO: consolidate?
+	public final static int UIButtonOffset = 2;
+	public final static int UIButtonXPos = UIButtonOffset;
+	public final static int UIButtonYPos = tileSize + UIButtonOffset;
+	public final static int UIButtonSize = 58;
 	
 	// Constants used by Unit
-	public final static int tileSize = 62;
 	public final static int rightBound = 620;
 	public final static int leftBound = 62;
 	public final static int upBound = 62;
@@ -106,6 +114,10 @@ public class Constants {
 	public final static int towerMaxHP = 120;
 	public final static int towerDamage = 0;	// since towers themselves don't do damage (only their bullets do)
 	public final static int towerAttackDelay = 2200;
+	public final static int towerGenDelay = 10000;
+	public final static int towerCostBlue = 100;
+	public final static int cheapestTowerCost = towerCostBlue;
+	public final static int energyRateBlue = 10;
 	
 	// Constants used by Bullet
 	public final static int bulletWidth = 20;
