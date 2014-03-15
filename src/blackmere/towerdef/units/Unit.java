@@ -7,11 +7,11 @@ import org.newdawn.slick.geom.Rectangle;
 import static blackmere.towerdef.util.Constants.*;
 
 public abstract class Unit {
-	protected float x, y;
-	protected int currentHP, maxHP, damage;
+	protected float x, y, currentHP, maxHP, damage;
 	protected boolean dead, attacking, hit;
 	protected Animation sprite;
 	protected long lastHitUpdate, lastAttackUpdate;
+	protected Rectangle healthBar, healthGauge;
 	
 	public Unit(float startX, float startY, int HP, int dmg) {
 		x = startX;
@@ -24,6 +24,8 @@ public abstract class Unit {
 		hit = false;
 		lastHitUpdate = System.currentTimeMillis();
 		lastAttackUpdate = System.currentTimeMillis();
+		healthBar = new Rectangle(x + healthBarOffsetX, y - healthBarOffsetY, healthBarWidth, healthBarHeight);
+		healthGauge = new Rectangle(x + healthBarOffsetX, y - healthBarOffsetY, healthBarWidth, healthBarHeight);
 	}
 	
 	public abstract Rectangle getBoundingBox();
@@ -50,15 +52,42 @@ public abstract class Unit {
 		g.draw(box); */
 	}
 	
-	public int getDamage() {
+	public void drawHealthBar(Graphics g) {
+		// TODO: only draw health bar if a current target of something, or taking damage
+		// TODO: make function to choose health color based on percent (used both here and in the UI text)
+		if (this instanceof Bullet) {
+			return; // don't draw health bars for bullets
+		}
+		
+		float thirdHP = maxHP / 3;
+
+		if (currentHP <= thirdHP) {
+			g.setColor(Color.red);
+		} else if (currentHP < 2 * thirdHP) {
+			g.setColor(Color.yellow);
+		} else {
+			g.setColor(Color.green);
+		}
+
+		// update the health bar; TODO: do somewhere that's called less often?
+		healthBar.setLocation(x + healthBarOffsetX, y - healthBarOffsetY);
+		healthGauge.setLocation(x + healthBarOffsetX, y - healthBarOffsetY);
+		healthGauge.setWidth((currentHP / maxHP) * healthBarWidth);
+
+		g.fill(healthGauge);
+		g.setColor(Color.black);
+		g.draw(healthBar);
+	}
+	
+	public float getDamage() {
 		return damage;
 	}
 	
-	public int getHP() {
+	public float getHP() {
 		return currentHP;
 	}
 	
-	public int getMaxHP() {
+	public float getMaxHP() {
 		return maxHP;
 	}
 	
@@ -90,7 +119,12 @@ public abstract class Unit {
 		}
 	}
 	
-	public void takeHit(int damageAmount) {
+	public void takeHit(float damageAmount) {
+		// if already dead, don't take any more damage
+		if (currentHP <= 0) {
+			return;
+		}
+		
 		hit = true;
 		currentHP -= damageAmount;
 		lastHitUpdate = System.currentTimeMillis();

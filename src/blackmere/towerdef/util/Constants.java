@@ -16,7 +16,7 @@ public class Constants {
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;
-	public final static float enemyStartY = 248f;
+	public final static float enemyStartY = 124f;
 	public final static float towerStartX = 62f;
 	public final static float towerStartY = 124f;
 	public final static int resTextXPos = 20;
@@ -37,6 +37,10 @@ public class Constants {
 	public final static int downBound = 372;
 	public final static int hitDuration = 800;
 	public final static int animationDelta = 150;	// currently used by all animations
+	public final static int healthBarWidth = 40;
+	public final static int healthBarHeight = 6;
+	public final static int healthBarOffsetX = 12;
+	public final static int healthBarOffsetY = 6;
 	
 	// Constants used by Hero
 	public final static int heroWidth = 62;	// rightmost spear point to leftmost spear point

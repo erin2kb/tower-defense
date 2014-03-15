@@ -43,6 +43,8 @@ public class Demo extends BasicGameState {
 		allUnits = new ArrayList<Unit>();
 		allUnits.add(activeHero);
 		allUnits.add(new Enemy(enemyStartX, enemyStartY));
+		allUnits.add(new Enemy(enemyStartX, enemyStartY + tileSize));
+		allUnits.add(new Enemy(enemyStartX, enemyStartY - tileSize));
 		allUnits.add(new Tower(towerStartX, towerStartY));
 		buttons = new ArrayList<Button>();
 		Image towerButtonImage = new Image("res/towerButton.png");
@@ -131,9 +133,14 @@ public class Demo extends BasicGameState {
 			b.draw(g);
 		}
 		
-		// finally, draw the hero, as long as they're currently alive
+		// then, draw the hero, as long as they're currently alive
 		if (!activeHero.isDead()) {
-			activeHero.draw(g);		// TODO: document why passing in g (for the sake of the DEBUG code for bounding boxes)
+			activeHero.draw(g);
+		}
+		
+		// finally, draw all the health bars
+		for (Unit u : getActiveUnits()) {
+			u.drawHealthBar(g);
 		}
 	}
 	
