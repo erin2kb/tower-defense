@@ -7,17 +7,20 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Button {
 	private int x, y, width, height;
-	private Image buttonImage;
+	private Image currentImage, buttonImage, lockedImage;
 	private Rectangle boundingBox, outline;
-	private boolean selected;
+	private boolean selected, locked;
 	
-	public Button(Image image, int x, int y, int w, int h) {
+	public Button(Image image, Image lockImage, int x, int y, int w, int h) {
 		buttonImage = image;
+		lockedImage = lockImage;
+		currentImage = lockedImage;
 		this.x = x;
 		this.y = y;
 		width = w;
 		height = h;
 		selected = false;
+		locked = true;
 		boundingBox = new Rectangle(x, y, width, height);
 		outline = new Rectangle(x - 1, y - 1, width + 2, height + 2);	// TODO: un-hard code
 	}
@@ -27,7 +30,7 @@ public class Button {
 	}
 	
 	public void draw(Graphics g) {
-		buttonImage.draw(x, y);
+		currentImage.draw(x, y);
 		
 		if (selected) {
 			g.setColor(Color.blue);	// TODO: un-hard code
@@ -37,5 +40,14 @@ public class Button {
 	
 	public void toggleSelect() {
 		selected = !selected;		// TODO: make outline bolder
+	}
+	
+	public void unlock() {
+		locked = false;
+		currentImage = buttonImage;
+	}
+	
+	public boolean isLocked() {
+		return locked;
 	}
 }

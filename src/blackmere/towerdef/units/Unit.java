@@ -74,6 +74,10 @@ public abstract class Unit {
 		return dead;
 	}
 	
+	private float getX() {
+		return x;
+	}
+	
 	public boolean isAttacking() {
 		return attacking;
 	}
@@ -102,6 +106,11 @@ public abstract class Unit {
 	}
 	
 	public boolean withinRange(Unit u) {
+		// special case for towers
+		if (u instanceof Tower) {
+			return (this.getLane() == u.getLane()) && (this.getX() > u.getX());
+		}
+		
 		Rectangle box = getTargetBox();
 		Rectangle otherBox = u.getAttackBox();		// TODO: ensure this can't be called on units without an attackbox?
 		

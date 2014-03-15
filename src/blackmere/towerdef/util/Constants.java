@@ -12,7 +12,7 @@ public class Constants {
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
 	public final static int tileSize = 62;
-	public final static int initialEnergy = 200;
+	public final static int initialEnergy = 1000;	// 190
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;

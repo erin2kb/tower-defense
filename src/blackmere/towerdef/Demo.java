@@ -46,8 +46,14 @@ public class Demo extends BasicGameState {
 		allUnits.add(new Tower(towerStartX, towerStartY));
 		buttons = new ArrayList<Button>();
 		Image towerButtonImage = new Image("res/towerButton.png");
-		Button towerButton = new Button(towerButtonImage, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
-		buttons.add(towerButton);
+		Image towerButtonLocked = new Image("res/towerButtonLocked.png");
+		Button towerButtonBlue = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
+		Button towerButtonPurple = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + tileSize, UIButtonSize, UIButtonSize);	// TODO: more precise pos; better init?
+		Button towerButtonRed = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + 2 * tileSize, UIButtonSize, UIButtonSize);	// TODO: use the actual images
+		towerButtonBlue.unlock();
+		buttons.add(towerButtonBlue);
+		buttons.add(towerButtonPurple);
+		buttons.add(towerButtonRed);
 	}
 
 	//
@@ -190,9 +196,9 @@ public class Demo extends BasicGameState {
 	
 	private void towerLogic(Tower t) throws SlickException {
 		for (Unit u : getActiveUnits()) {
-			if (u instanceof Enemy && u.getLane() == t.getLane() && t.timeToFire()) {
+			if (u instanceof Enemy && u.withinRange(t) && t.timeToFire()) {
 				allUnits.add(t.getBullet());
-				return;		// TODO: find a better way
+				return;		// TODO: find a better way?
 			}
 		}
 		
@@ -218,19 +224,24 @@ public class Demo extends BasicGameState {
 		}
 	}
 	
-	// TODO: reduce enemy hit duration so it can die faster if under heavy attack?
-	
 	// override of InputListener interface method
 	public void mouseClicked(int button, int x, int y, int count) {
+		//System.out.println("Click at " + x + "," + y);		// debug line
+		
 		// TODO: process UI clicks first
 		if (buttons.get(0).getBoundingBox().contains(x, y)) {
 			buildMode = !buildMode;
 			buttons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
-			return;		// so we don't build a tower on top of the button; TODO: consolidate with branch below?
+			return;		// TODO: consolidate with branch below?
 		}
 		
 		if (!buildMode) {
 			return;		// don't process clicks unless we're building
+		}
+		
+		// don't process build clicks that are in the UI
+		if (x <= leftBound || x >= rightBound || y <= upBound || y >= downBound) {	// TODO: the top and bottom boundaries seem a tad off
+			return;	// TODO: consolidate
 		}
 		
 		// process battlefield clicks
