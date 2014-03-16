@@ -10,9 +10,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import blackmere.towerdef.ui.GameOver;
 import blackmere.towerdef.ui.MainMenu;
+import blackmere.towerdef.ui.Victory;
 
 public class GameManager extends StateBasedGame {
-
+	
 	// constructor
 	public GameManager(String title) {
 		super(title);
@@ -24,6 +25,7 @@ public class GameManager extends StateBasedGame {
 		addState(new Demo());
 		addState(new PauseMenu());
 		addState(new GameOver());
+		addState(new Victory());
 	}
 
 	//

@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import blackmere.towerdef.Demo;
 import blackmere.towerdef.util.Direction;
 import blackmere.towerdef.util.Utility;
 import static blackmere.towerdef.util.Constants.*;
@@ -21,8 +22,8 @@ public class Hero extends Unit {
 
 	
 	// TODO: handle exceptions
-	public Hero(float startX, float startY) throws SlickException {
-		super(startX, startY, heroMaxHP, heroDamage);
+	public Hero(Demo lv, float startX, float startY) throws SlickException {
+		super(lv, startX, startY, heroMaxHP, heroDamage);
 		target = null;
 		facingRight = true;
 		damageDone = false;

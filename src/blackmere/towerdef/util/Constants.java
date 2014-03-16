@@ -13,10 +13,16 @@ public class Constants {
 	public final static int mainMenuID = 1;
 	public final static int pauseID = 2;
 	public final static int gameOverID = 3;
+	public final static int victoryID = 4;
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
 	public final static int tileSize = 62;
-	public final static int initialEnergy = 1000;	// 190
+	public final static int initialEnergy = 200;
+	public final static int numEnemiesTotal = 20;
+	public final static int firstSpawnDelay = 10000;
+	public final static int secondSpawnDelay = 6000;
+	public final static int thirdSpawnDelay = 4000;
+	public final static int fourthSpawnDelay = 2000;
 	public final static float heroStartX = 186f;
 	public final static float heroStartY = 248f;
 	public final static float enemyStartX = 620f;
@@ -105,9 +111,9 @@ public class Constants {
 	public final static int enemyIdleDuration = 26000;	// doesn't actually matter at this point, since there's only one frame in the animation
 	public final static int enemyWalkDuration = 16000;	// TODO: if same across all units, then consolidate (check for other consolidation opportunities too)
 	public final static int enemyAttackDuration = 26000;
-	public final static int enemyMaxHP = 160;
+	public final static int enemyMaxHP = 80;
 	public final static int enemyDamage = 10;
-	public final static float enemySpeed = 0.0004f;		// 0.0008f
+	public final static float enemySpeed = 0.0002f;		// 0.0008f
 	public final static int enemyDelta = 150;
 	public final static int enemyAttackDelay = 3000;
 	
@@ -119,10 +125,10 @@ public class Constants {
 	public final static int towerNumIdleFrames = 1;
 	public final static int towerIdleDuration = 26000;	// doesn't actually matter at this point, since there's only one frame in the animation --> consolidate?
 	public final static int towerBulletSpawnOffset = 34;
-	public final static int towerMaxHP = 120;
+	public final static int towerMaxHP = 80;
 	public final static int towerDamage = 0;	// since towers themselves don't do damage (only their bullets do)
 	public final static int towerAttackDelay = 2200;
-	public final static int towerGenDelay = 10000;
+	public final static int towerGenDelay = 5000;
 	public final static int towerCostBlue = 100;
 	public final static int cheapestTowerCost = towerCostBlue;
 	public final static int energyRateBlue = 10;
@@ -154,5 +160,8 @@ public class Constants {
 	public final static int mainButtonOffsetGap = 40;
 	public final static int mainButtonWidth = 100;
 	public final static int mainButtonHeight = 40;
+	public final static int victoryButtonOffsetX = 30;
+	public final static int victoryButtonWidth = 110;
 	public final static Color buttonColor = new Color(191, 172, 226);
+	public final static String gameVersion = "1.0";
 }

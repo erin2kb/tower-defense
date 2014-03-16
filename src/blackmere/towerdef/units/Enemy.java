@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import blackmere.towerdef.Demo;
 import blackmere.towerdef.util.Utility;
 
 import static blackmere.towerdef.util.Constants.*;
@@ -17,8 +18,8 @@ public class Enemy extends Unit {
 	private Animation walkLeft, attackLeft, idleLeft;
 	private Unit target;
 	
-	public Enemy(float startX, float startY) throws SlickException {
-		super(startX, startY, enemyMaxHP, enemyDamage);
+	public Enemy(Demo lv, float startX, float startY) throws SlickException {
+		super(lv, startX, startY, enemyMaxHP, enemyDamage);
 		target = null;
 		
 		idleLeftFrames = new Image[enemyNumIdleFrames];

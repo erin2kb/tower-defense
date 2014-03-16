@@ -5,6 +5,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import blackmere.towerdef.Demo;
+
 import static blackmere.towerdef.util.Constants.*;
 
 public class Tower extends Unit {
@@ -15,11 +17,12 @@ public class Tower extends Unit {
 	private long lastShotFired, lastEnergyGen;
 	private int buildCost, energyRate;
 
-	public Tower(float startX, float startY) throws SlickException {
-		super(startX, startY, towerMaxHP, towerDamage);
+	public Tower(Demo lv, float startX, float startY) throws SlickException {
+		super(lv, startX, startY, towerMaxHP, towerDamage);
 		lastShotFired = 0;
 		buildCost = towerCostBlue;
 		energyRate = energyRateBlue;
+		lastEnergyGen = System.currentTimeMillis();
 		
 		idleFrames = new Image[towerNumIdleFrames];
 		idleFrames[0] = new Image("res/tower.png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
@@ -89,6 +92,6 @@ public class Tower extends Unit {
 	
 	// TODO: exceptions
 	public Bullet getBullet() throws SlickException {
-		return new Bullet(x + towerBulletSpawnOffset, y);
+		return new Bullet(level, x + towerBulletSpawnOffset, y);
 	}
 }

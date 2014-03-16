@@ -4,6 +4,8 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+
+import blackmere.towerdef.Demo;
 import static blackmere.towerdef.util.Constants.*;
 
 public abstract class Unit {
@@ -12,8 +14,10 @@ public abstract class Unit {
 	protected Animation sprite;
 	protected long lastHitUpdate, lastAttackUpdate;
 	protected Rectangle healthBar, healthGauge;
+	protected Demo level;	// TODO: do this a better way
 	
-	public Unit(float startX, float startY, int HP, int dmg) {
+	public Unit(Demo lv, float startX, float startY, int HP, int dmg) {
+		level = lv;
 		x = startX;
 		y = startY;
 		damage = dmg;
@@ -96,6 +100,10 @@ public abstract class Unit {
 	}
 	
 	public void die() {
+		if (this instanceof Enemy) {
+			level.anotherOneBitesTheDust();
+		}
+		
 		dead = true;
 	}
 	

@@ -16,6 +16,7 @@ import org.newdawn.slick.tiled.TiledMap;
 import blackmere.towerdef.ui.Button;
 import blackmere.towerdef.ui.GameOver;
 import blackmere.towerdef.ui.TowerButton;
+import blackmere.towerdef.ui.Victory;
 import blackmere.towerdef.units.Enemy;
 import blackmere.towerdef.units.Hero;
 import blackmere.towerdef.units.Tower;
@@ -33,8 +34,9 @@ public class Demo extends BasicGameState {
 	private ArrayList<Unit> allUnits;
 	private ArrayList<TowerButton> towerButtons;
 	private Hero activeHero;
-	private int currentEnergy;
+	private int currentEnergy, enemiesSpawned, enemiesKilled, spawnDelay;
 	private boolean buildMode;
+	private long lastSpawn;
 		
 	//
 	public void init(GameContainer container, StateBasedGame manager) throws SlickException {
@@ -42,14 +44,15 @@ public class Demo extends BasicGameState {
 		gameContainer = container;
 		demoMap = new TiledMap("res/basicMap.tmx");
 		currentEnergy = initialEnergy;
+		enemiesSpawned = 1;		// the first enemy, which we spawn here
+		enemiesKilled = 0;
+		spawnDelay = firstSpawnDelay;
+		lastSpawn = System.currentTimeMillis();
 		buildMode = false;
-		activeHero = new Hero(heroStartX, heroStartY);
+		activeHero = new Hero(this, heroStartX, heroStartY);
 		allUnits = new ArrayList<Unit>();
 		allUnits.add(activeHero);
-		allUnits.add(new Enemy(enemyStartX, enemyStartY));
-		allUnits.add(new Enemy(enemyStartX, enemyStartY + tileSize));
-		allUnits.add(new Enemy(enemyStartX, enemyStartY - tileSize));
-		allUnits.add(new Tower(towerStartX, towerStartY));
+		allUnits.add(new Enemy(this, enemyStartX, enemyStartY));	// TODO: make separate Debug class? Level superclass?			
 		towerButtons = new ArrayList<TowerButton>();
 		Image towerButtonImage = new Image("res/towerButton.png");
 		Image towerButtonLocked = new Image("res/towerButtonLocked.png");
@@ -151,6 +154,26 @@ public class Demo extends BasicGameState {
 	//
 	public void update(GameContainer container, StateBasedGame manager, int delta)
 			throws SlickException {
+		if (enemiesKilled >= numEnemiesTotal) {
+			Image bg = new Image(windowWidth, windowHeight);
+			container.getGraphics().copyArea(bg, 0, 0);
+			((Victory) gameManager.getState(victoryID)).setBackground(bg);
+			gameManager.enterState(victoryID);
+		} else if (enemiesKilled >= 3 * numEnemiesTotal / 4) {
+			spawnDelay = fourthSpawnDelay;
+		} else if (enemiesKilled >= 2 * numEnemiesTotal / 4) {
+			spawnDelay = thirdSpawnDelay;
+		} else if (enemiesKilled >= numEnemiesTotal / 4) {
+			spawnDelay = secondSpawnDelay;
+		}
+		
+		long currentTime = System.currentTimeMillis();	// TODO: make a f'n for such time comparisons?
+		if (enemiesSpawned < numEnemiesTotal && currentTime - lastSpawn >= spawnDelay) {
+			lastSpawn = currentTime;
+			spawnEnemy();
+		}
+		
+		// process input
 		Input input = container.getInput();
 		
 		if (input.isKeyPressed(Input.KEY_P)) {
@@ -272,7 +295,7 @@ public class Demo extends BasicGameState {
 		Tower t = null;
 		
 		try {
-			t = new Tower(towerX, towerY);
+			t = new Tower(this, towerX, towerY);
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -299,10 +322,22 @@ public class Demo extends BasicGameState {
 	}
 	
 	// TODO: allow towers to be built 'on top' of enemies to a reasonable extent, as in PvZ
-	// TODO: allow hero to walk over top of towers?
+	// TODO: allow hero to walk over top of towers
 
 	//
 	public int getID() {
 		return demoID;
+	}
+	
+	//
+	public void anotherOneBitesTheDust() {
+		enemiesKilled++;
+	}
+	
+	//
+	private void spawnEnemy() throws SlickException {
+		int lane = 1 + (int)(Math.random() * ((5 - 1) + 1));
+		enemiesSpawned++;
+		allUnits.add(new Enemy(this, enemyStartX, tileSize * lane));
 	}
 }

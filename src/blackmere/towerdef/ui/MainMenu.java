@@ -1,12 +1,6 @@
 package blackmere.towerdef.ui;
 
-import static blackmere.towerdef.util.Constants.demoID;
-import static blackmere.towerdef.util.Constants.mainButtonHeight;
-import static blackmere.towerdef.util.Constants.mainButtonOffsetGap;
-import static blackmere.towerdef.util.Constants.mainButtonOffsetX;
-import static blackmere.towerdef.util.Constants.mainButtonOffsetY;
-import static blackmere.towerdef.util.Constants.mainButtonWidth;
-import static blackmere.towerdef.util.Constants.mainMenuID;
+import static blackmere.towerdef.util.Constants.*;
 
 import java.awt.Font;
 
@@ -55,6 +49,7 @@ public class MainMenu extends BasicGameState {
 		g.setColor(Color.black);
 		g.drawString("Begin Demo", buttonStart.getX() + 4, buttonStart.getY() + 10);
 		g.drawString("Quit", buttonQuit.getX() + 30, buttonQuit.getY() + 10);
+		g.drawString("Game Version: " + gameVersion, rightBound - 100, downBound + 40);	// TODO: un-hard code
 		g.setFont(bigFont);
 		g.drawString("Night of a Thousand Bugs", 36, 30);	// TODO: un-hard code
 		g.setFont(medFont);

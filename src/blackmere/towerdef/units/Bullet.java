@@ -5,6 +5,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
+import blackmere.towerdef.Demo;
 import blackmere.towerdef.util.Utility;
 
 import static blackmere.towerdef.util.Constants.*;
@@ -15,8 +16,8 @@ public class Bullet extends Unit {
 	private int[] idleDurationArray;
 	private Animation idle;
 
-	public Bullet(float startX, float startY) throws SlickException {
-		super(startX, startY, bulletMaxHP, bulletDamage);
+	public Bullet(Demo lv, float startX, float startY) throws SlickException {
+		super(lv, startX, startY, bulletMaxHP, bulletDamage);
 		
 		idleFrames = new Image[bulletNumIdleFrames];
 		idleFrames[0] = new Image("res/bullet.png");
