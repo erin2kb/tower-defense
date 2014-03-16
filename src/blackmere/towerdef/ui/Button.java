@@ -2,27 +2,19 @@ package blackmere.towerdef.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import static blackmere.towerdef.util.Constants.*;
 
 public class Button {
-	private int x, y, width, height;
-	private Image currentImage, buttonImage, lockedImage;
-	private Rectangle boundingBox, outline;
-	private boolean selected, locked;
+	protected int x, y, width, height;
+	protected Rectangle boundingBox;
 	
-	public Button(Image image, Image lockImage, int x, int y, int w, int h) {
-		buttonImage = image;
-		lockedImage = lockImage;
-		currentImage = lockedImage;
+	public Button(int x, int y, int w, int h) {
 		this.x = x;
 		this.y = y;
 		width = w;
 		height = h;
-		selected = false;
-		locked = true;
 		boundingBox = new Rectangle(x, y, width, height);
-		outline = new Rectangle(x - 1, y - 1, width + 2, height + 2);	// TODO: un-hard code
 	}
 	
 	public Rectangle getBoundingBox() {
@@ -30,24 +22,18 @@ public class Button {
 	}
 	
 	public void draw(Graphics g) {
-		currentImage.draw(x, y);
-		
-		if (selected) {
-			g.setColor(Color.blue);	// TODO: un-hard code
-			g.draw(outline);
-		}
+		g.setColor(buttonColor);
+		g.fill(boundingBox);
+		g.setColor(Color.black);	// TODO: un-hard code
+		g.draw(boundingBox);
 	}
 	
-	public void toggleSelect() {
-		selected = !selected;		// TODO: make outline bolder
+	public int getX() {
+		return x;
 	}
 	
-	public void unlock() {
-		locked = false;
-		currentImage = buttonImage;
-	}
-	
-	public boolean isLocked() {
-		return locked;
+	// TODO: remove these getters (functionality is to be replaced; see other todos)
+	public int getY() {
+		return y;
 	}
 }

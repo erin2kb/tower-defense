@@ -8,6 +8,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import blackmere.towerdef.ui.GameOver;
+import blackmere.towerdef.ui.MainMenu;
+
 public class GameManager extends StateBasedGame {
 
 	// constructor
@@ -17,13 +20,15 @@ public class GameManager extends StateBasedGame {
 
 	//
 	public void initStatesList(GameContainer container) throws SlickException {
+		addState(new MainMenu());
 		addState(new Demo());
 		addState(new PauseMenu());
+		addState(new GameOver());
 	}
 
 	//
 	public static void main(String[] args) {
-		GameManager newGame = new GameManager("Tower Defense Demo");
+		GameManager newGame = new GameManager("Night of a Thousand Bugs  ~Demo~");
 		AppGameContainer gameContainer;
 		// TODO: redirect System.err to a log file; test these log files
 

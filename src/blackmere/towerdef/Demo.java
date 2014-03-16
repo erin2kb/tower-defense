@@ -14,6 +14,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 import blackmere.towerdef.ui.Button;
+import blackmere.towerdef.ui.GameOver;
+import blackmere.towerdef.ui.TowerButton;
 import blackmere.towerdef.units.Enemy;
 import blackmere.towerdef.units.Hero;
 import blackmere.towerdef.units.Tower;
@@ -26,9 +28,10 @@ import static blackmere.towerdef.util.Constants.*;
 public class Demo extends BasicGameState {
 	
 	private StateBasedGame gameManager;
+	private GameContainer gameContainer;	// TODO: clean this up (some f'ns use 'container' param instead)
 	private TiledMap demoMap;
 	private ArrayList<Unit> allUnits;
-	private ArrayList<Button> buttons;
+	private ArrayList<TowerButton> towerButtons;
 	private Hero activeHero;
 	private int currentEnergy;
 	private boolean buildMode;
@@ -36,6 +39,7 @@ public class Demo extends BasicGameState {
 	//
 	public void init(GameContainer container, StateBasedGame manager) throws SlickException {
 		gameManager = manager;
+		gameContainer = container;
 		demoMap = new TiledMap("res/basicMap.tmx");
 		currentEnergy = initialEnergy;
 		buildMode = false;
@@ -46,16 +50,16 @@ public class Demo extends BasicGameState {
 		allUnits.add(new Enemy(enemyStartX, enemyStartY + tileSize));
 		allUnits.add(new Enemy(enemyStartX, enemyStartY - tileSize));
 		allUnits.add(new Tower(towerStartX, towerStartY));
-		buttons = new ArrayList<Button>();
+		towerButtons = new ArrayList<TowerButton>();
 		Image towerButtonImage = new Image("res/towerButton.png");
 		Image towerButtonLocked = new Image("res/towerButtonLocked.png");
-		Button towerButtonBlue = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
-		Button towerButtonPurple = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + tileSize, UIButtonSize, UIButtonSize);	// TODO: more precise pos; better init?
-		Button towerButtonRed = new Button(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + 2 * tileSize, UIButtonSize, UIButtonSize);	// TODO: use the actual images
+		TowerButton towerButtonBlue = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
+		TowerButton towerButtonPurple = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + tileSize, UIButtonSize, UIButtonSize);	// TODO: more precise pos; better init?
+		TowerButton towerButtonRed = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + 2 * tileSize, UIButtonSize, UIButtonSize);	// TODO: use the actual images
 		towerButtonBlue.unlock();
-		buttons.add(towerButtonBlue);
-		buttons.add(towerButtonPurple);
-		buttons.add(towerButtonRed);
+		towerButtons.add(towerButtonBlue);
+		towerButtons.add(towerButtonPurple);
+		towerButtons.add(towerButtonRed);
 	}
 
 	//
@@ -97,7 +101,7 @@ public class Demo extends BasicGameState {
 		g.drawString((int) currentHP + "/" + (int) maxHP, HPTextXPos + HPTextOffset, HPTextYPos);
 		
 		// draw the UI buttons
-		for (Button b : buttons) {
+		for (Button b : towerButtons) {
 			b.draw(g);
 		}
 		
@@ -214,9 +218,16 @@ public class Demo extends BasicGameState {
 		}
 	}
 	
-	private void enemyLogic(Enemy e) {
+	private void enemyLogic(Enemy e) throws SlickException {
 		e.checkAttack(getActiveUnits());
 		e.move(getActiveUnits());
+		
+		if (e.hasWon()) {
+			Image bg = new Image(windowWidth, windowHeight);	// TODO: f'n for this?
+			gameContainer.getGraphics().copyArea(bg, 0, 0);
+			((GameOver) gameManager.getState(gameOverID)).setBackground(bg);
+			gameManager.enterState(gameOverID);
+		}
 	}
 	
 	private void bulletLogic(Bullet b) {
@@ -236,9 +247,9 @@ public class Demo extends BasicGameState {
 		//System.out.println("Click at " + x + "," + y);		// debug line
 		
 		// TODO: process UI clicks first
-		if (buttons.get(0).getBoundingBox().contains(x, y)) {
+		if (towerButtons.get(0).getBoundingBox().contains(x, y)) {
 			buildMode = !buildMode;
-			buttons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
+			towerButtons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
 			return;		// TODO: consolidate with branch below?
 		}
 		

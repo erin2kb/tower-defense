@@ -114,6 +114,10 @@ public class Enemy extends Unit {
 		}
 	}
 	
+	public boolean hasWon() {
+		return x < leftBound - 10;
+	}
+	
 	// TODO: add logic for when enemy reaches left side of screen
 	// TODO: lanes (only detect collisions if in lane) -- need to reconsider this in order to use for enemies (since heroes not confined to lanes, but still need to be attacked)
 	// TODO: document: enemy 'invincible' when flashing red (test this)...

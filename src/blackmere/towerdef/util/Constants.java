@@ -1,5 +1,7 @@
 package blackmere.towerdef.util;
 
+import org.newdawn.slick.Color;
+
 // TODO: note that this method isn't the best security-wise; a better solution
 // would be to have a Constants file for each individual class/family [maybe??]
 public class Constants {
@@ -8,7 +10,9 @@ public class Constants {
 	
 	// Constants used by GameManager and other top-level classes (such as "Demo")
 	public final static int demoID = 0;		// state ID for the 'demo' state
-	public final static int pauseID = 1;
+	public final static int mainMenuID = 1;
+	public final static int pauseID = 2;
+	public final static int gameOverID = 3;
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
 	public final static int tileSize = 62;
@@ -134,4 +138,21 @@ public class Constants {
 	public final static int bulletDamage = 10;
 	public final static float bulletSpeed = 0.0006f;		// 0.001f
 	public final static int bulletDelta = 150;
+	
+	// Constants used by the menus (i.e. Main, Pause, Game Over)
+	public final static int pauseDialogX = 184;
+	public final static int pauseDialogY = 102;
+	public final static int pauseDialogWidth = 310;
+	public final static int pauseDialogHeight = 186;
+	public final static int pauseButtonOffsetX = 46;
+	public final static int pauseButtonOffsetY = pauseDialogHeight - 70;
+	public final static int pauseButtonOffsetGap = 40;
+	public final static int pauseButtonWidth = 90;
+	public final static int pauseButtonHeight = 40;
+	public final static int mainButtonOffsetX = 286;
+	public final static int mainButtonOffsetY = 260;
+	public final static int mainButtonOffsetGap = 40;
+	public final static int mainButtonWidth = 100;
+	public final static int mainButtonHeight = 40;
+	public final static Color buttonColor = new Color(191, 172, 226);
 }
