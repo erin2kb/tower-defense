@@ -13,9 +13,9 @@ import blackmere.towerdef.util.Utility;
 import static blackmere.towerdef.util.Constants.*;
 
 public class Enemy extends Unit {
-	private Image[] walkLeftFrames, attackLeftFrames, idleLeftFrames;
-	private int[] walkDurationArray, attackDurationArray, idleDurationArray;
-	private Animation walkLeft, attackLeft, idleLeft;
+	private Image[] idleLeftFrames;	//walkLeftFrames, attackLeftFrames;
+	private int[] idleDurationArray; //walkDurationArray, attackDurationArray;
+	private Animation idleLeft; //walkLeft, attackLeft;
 	private Unit target;
 	
 	public Enemy(Demo lv, float startX, float startY) throws SlickException {
@@ -23,7 +23,7 @@ public class Enemy extends Unit {
 		target = null;
 		
 		idleLeftFrames = new Image[enemyNumIdleFrames];
-		idleLeftFrames[0] = new Image("res/enemy/wl1.png");
+		idleLeftFrames[0] = new Image("blackmere/towerdef/res/enemy/wl1.png");
 		idleDurationArray = new int[enemyNumIdleFrames];
 		idleDurationArray[0] = enemyIdleDuration;
 		
@@ -57,9 +57,9 @@ public class Enemy extends Unit {
 		return new Rectangle(x + enemyAttackOffsetX, y + enemyAttackOffsetY, enemyAttackWidth, enemyAttackHeight);
 	}
 	
-	protected boolean safeToMove(ArrayList<Unit> units) {
+	protected boolean safeToMove(ArrayList<Unit> units, int delta) {
 		Rectangle box = getMotionBox();
-		float newX = box.getX() - enemyDelta * enemySpeed;
+		float newX = box.getX() - delta * enemySpeed;
 		Rectangle newBox = new Rectangle(newX, box.getY(), box.getWidth(), box.getHeight());
 		
 		for (Unit u : units) {
@@ -74,9 +74,9 @@ public class Enemy extends Unit {
 		return true;
 	}
 	
-	public void move(ArrayList<Unit> units) {
-		if (safeToMove(units) && !attacking) {
-			x -= enemyDelta * enemySpeed;
+	public void move(ArrayList<Unit> units, int delta) {
+		if (safeToMove(units, delta) && !attacking) {
+			x -= delta * enemySpeed;
 		}
 	}
 	
@@ -119,8 +119,7 @@ public class Enemy extends Unit {
 		return x < leftBound - 10;
 	}
 	
-	// TODO: add logic for when enemy reaches left side of screen
-	// TODO: lanes (only detect collisions if in lane) -- need to reconsider this in order to use for enemies (since heroes not confined to lanes, but still need to be attacked)
+	// TODO: only detect collisions if in lane -- need to reconsider this in order to use for enemies (since heroes not confined to lanes, but still need to be attacked)
 	// TODO: document: enemy 'invincible' when flashing red (test this)...
 	// TODO: ...or, change this behavior and reset flash on each hit (need to account for individual delay between bullet/hero so no instant-kills)
 	// TODO: fix: make it so hero can't block enemy from moving unless enemy can attack hero (inc. for bee/ladybug too)

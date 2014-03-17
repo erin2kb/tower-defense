@@ -25,7 +25,7 @@ public class Tower extends Unit {
 		lastEnergyGen = System.currentTimeMillis();
 		
 		idleFrames = new Image[towerNumIdleFrames];
-		idleFrames[0] = new Image("res/tower.png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
+		idleFrames[0] = new Image("blackmere/towerdef/res/tower.png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
 		idleDurationArray = new int[towerNumIdleFrames];
 		idleDurationArray[0] = towerIdleDuration;
 		

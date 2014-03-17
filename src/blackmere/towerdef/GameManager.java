@@ -10,6 +10,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import blackmere.towerdef.ui.GameOver;
 import blackmere.towerdef.ui.MainMenu;
+import blackmere.towerdef.ui.PauseMenu;
 import blackmere.towerdef.ui.Victory;
 
 public class GameManager extends StateBasedGame {
@@ -38,6 +39,7 @@ public class GameManager extends StateBasedGame {
 			gameContainer = new AppGameContainer(newGame);
 			gameContainer.setDisplayMode(windowWidth, windowHeight, false);
 			gameContainer.setShowFPS(false);
+			/////gameContainer.setMinimumLogicUpdateInterval(100); // TODO: figure out how to use this?
 			gameContainer.start();
 		} catch (SlickException e) {
 

@@ -30,7 +30,7 @@ public class Victory extends BasicGameState {
 			throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		dialog = new Image("res/dialogPause.png");	// TODO: don't just copy Pause [[rename the image]]
+		dialog = new Image("blackmere/towerdef/res/dialogPause.png");	// TODO: don't just copy Pause [[rename the image]]
 		dialogOutline = new Rectangle(pauseDialogX, pauseDialogY, pauseDialogWidth, pauseDialogHeight);	// TODO: don't just copy Pause, use own constants
 		buttonReplay = new Button(pauseDialogX + victoryButtonOffsetX, pauseDialogY + pauseButtonOffsetY, victoryButtonWidth, pauseButtonHeight);
 		buttonQuit = new Button(pauseDialogX + victoryButtonOffsetX + pauseButtonWidth + pauseButtonOffsetGap, pauseDialogY + pauseButtonOffsetY, victoryButtonWidth, pauseButtonHeight);

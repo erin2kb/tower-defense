@@ -40,7 +40,7 @@ public class GameOver extends BasicGameState {
 			throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		dialog = new Image("res/dialogGameOver.png");
+		dialog = new Image("blackmere/towerdef/res/dialogGameOver.png");
 		dialogOutline = new Rectangle(pauseDialogX, pauseDialogY, pauseDialogWidth, pauseDialogHeight);	// TODO: don't just copy Pause, use own constants
 		buttonRetry = new Button(pauseDialogX + pauseButtonOffsetX, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);
 		buttonQuit = new Button(pauseDialogX + pauseButtonOffsetX + pauseButtonWidth + pauseButtonOffsetGap, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);

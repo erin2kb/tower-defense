@@ -11,10 +11,11 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.tiled.TiledMap;
+//import org.newdawn.slick.tiled.TiledMap;
 
 import blackmere.towerdef.ui.Button;
 import blackmere.towerdef.ui.GameOver;
+import blackmere.towerdef.ui.PauseMenu;
 import blackmere.towerdef.ui.TowerButton;
 import blackmere.towerdef.ui.Victory;
 import blackmere.towerdef.units.Enemy;
@@ -30,7 +31,8 @@ public class Demo extends BasicGameState {
 	
 	private StateBasedGame gameManager;
 	private GameContainer gameContainer;	// TODO: clean this up (some f'ns use 'container' param instead)
-	private TiledMap demoMap;
+	//private TiledMap demoMap;
+	private Image map;
 	private ArrayList<Unit> allUnits;
 	private ArrayList<TowerButton> towerButtons;
 	private Hero activeHero;
@@ -42,7 +44,9 @@ public class Demo extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame manager) throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		demoMap = new TiledMap("res/basicMap.tmx");
+		//demoMap = new TiledMap("res/basicMap.tmx");
+		// TODO: go back to using TiledMap??
+		map = new Image("blackmere/towerdef/res/basicMap2.png");
 		currentEnergy = initialEnergy;
 		enemiesSpawned = 1;		// the first enemy, which we spawn here
 		enemiesKilled = 0;
@@ -54,8 +58,8 @@ public class Demo extends BasicGameState {
 		allUnits.add(activeHero);
 		allUnits.add(new Enemy(this, enemyStartX, enemyStartY));	// TODO: make separate Debug class? Level superclass?			
 		towerButtons = new ArrayList<TowerButton>();
-		Image towerButtonImage = new Image("res/towerButton.png");
-		Image towerButtonLocked = new Image("res/towerButtonLocked.png");
+		Image towerButtonImage = new Image("blackmere/towerdef/res/towerButton.png");
+		Image towerButtonLocked = new Image("blackmere/towerdef/res/towerButtonLocked.png");
 		TowerButton towerButtonBlue = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
 		TowerButton towerButtonPurple = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + tileSize, UIButtonSize, UIButtonSize);	// TODO: more precise pos; better init?
 		TowerButton towerButtonRed = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + 2 * tileSize, UIButtonSize, UIButtonSize);	// TODO: use the actual images
@@ -67,7 +71,8 @@ public class Demo extends BasicGameState {
 
 	//
 	public void render(GameContainer container, StateBasedGame manager, Graphics g) throws SlickException {
-		demoMap.render(0, 0);
+		//demoMap.render(0, 0);
+		map.draw(0, 0);
 		
 		// draw the UI text elements
 		g.setColor(Color.black);
@@ -187,9 +192,9 @@ public class Demo extends BasicGameState {
 			if (u instanceof Tower) {
 				towerLogic((Tower) u);
 			} else if (u instanceof Enemy) {
-				enemyLogic((Enemy) u);
+				enemyLogic((Enemy) u, delta);
 			} else if (u instanceof Bullet) {
-				bulletLogic((Bullet) u);
+				bulletLogic((Bullet) u, delta);
 			}
 		}
 
@@ -197,13 +202,13 @@ public class Demo extends BasicGameState {
 			return;		// don't do any more processing if hero is dead
 		} else if (! activeHero.isAttacking()) {
 			if (input.isKeyDown(Input.KEY_LEFT)) {
-				activeHero.move(Direction.LEFT, getActiveUnits());
+				activeHero.move(Direction.LEFT, getActiveUnits(), delta);
 			} else if (input.isKeyDown(Input.KEY_RIGHT)) {
-				activeHero.move(Direction.RIGHT, getActiveUnits());
+				activeHero.move(Direction.RIGHT, getActiveUnits(), delta);
 			} else if (input.isKeyDown(Input.KEY_UP)) {
-				activeHero.move(Direction.UP, getActiveUnits());
+				activeHero.move(Direction.UP, getActiveUnits(), delta);
 			} else if (input.isKeyDown(Input.KEY_DOWN)) {
-				activeHero.move(Direction.DOWN, getActiveUnits());
+				activeHero.move(Direction.DOWN, getActiveUnits(), delta);
 			} else if (input.isKeyDown(Input.KEY_SPACE)) {
 				activeHero.attack(getActiveUnits());
 			} else {
@@ -211,7 +216,7 @@ public class Demo extends BasicGameState {
 			}
 		} else {
 			// hero is alive and currently attacking
-			activeHero.checkAttack();
+			activeHero.checkAttack(delta);
 		}
 	}
 	
@@ -241,9 +246,9 @@ public class Demo extends BasicGameState {
 		}
 	}
 	
-	private void enemyLogic(Enemy e) throws SlickException {
+	private void enemyLogic(Enemy e, int delta) throws SlickException {
 		e.checkAttack(getActiveUnits());
-		e.move(getActiveUnits());
+		e.move(getActiveUnits(), delta);
 		
 		if (e.hasWon()) {
 			Image bg = new Image(windowWidth, windowHeight);	// TODO: f'n for this?
@@ -253,8 +258,8 @@ public class Demo extends BasicGameState {
 		}
 	}
 	
-	private void bulletLogic(Bullet b) {
-		b.move();
+	private void bulletLogic(Bullet b, int delta) {
+		b.move(delta);
 		
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Enemy && b.detectBulletCollision((Enemy) u)) {

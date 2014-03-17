@@ -31,11 +31,11 @@ public class Hero extends Unit {
 		walkLeftFrames = new Image[heroNumWalkFrames];
 		attackLeftFrames = new Image[heroNumAttackFrames];
 		idleLeftFrames = new Image[heroNumIdleFrames];
-		idleLeftFrames[0] = new Image("res/hero/wl1.png");
+		idleLeftFrames[0] = new Image("blackmere/towerdef/res/hero/wl1.png");
 		walkRightFrames = new Image[heroNumWalkFrames];
 		attackRightFrames = new Image[heroNumAttackFrames];
 		idleRightFrames = new Image[heroNumIdleFrames];
-		idleRightFrames[0] = new Image("res/hero/wr1.png");
+		idleRightFrames[0] = new Image("blackmere/towerdef/res/hero/wr1.png");
 		walkDurationArray = new int[heroNumWalkFrames];
 		attackDurationArray = new int[heroNumAttackFrames];
 		idleDurationArray = new int[heroNumIdleFrames];
@@ -43,8 +43,8 @@ public class Hero extends Unit {
 		
 		for (int i = 0; i < heroNumWalkFrames; i++) {
 			int index = i + 1;
-			String leftName = "res/hero/wl" + index + ".png";
-			String rightName = "res/hero/wr" + index + ".png";
+			String leftName = "blackmere/towerdef/res/hero/wl" + index + ".png";
+			String rightName = "blackmere/towerdef/res/hero/wr" + index + ".png";
 			walkLeftFrames[i] = new Image(leftName);
 			walkRightFrames[i] = new Image(rightName);
 			walkDurationArray[i] = heroWalkDuration;
@@ -52,8 +52,8 @@ public class Hero extends Unit {
 		
 		for (int i = 0; i < heroNumAttackFrames; i++) {
 			int index = i + 1;
-			String leftName = "res/hero/al" + index + ".png";
-			String rightName = "res/hero/ar" + index + ".png";
+			String leftName = "blackmere/towerdef/res/hero/al" + index + ".png";
+			String rightName = "blackmere/towerdef/res/hero/ar" + index + ".png";
 			attackLeftFrames[i] = new Image(leftName);
 			attackRightFrames[i] = new Image(rightName);
 			attackDurationArray[i] = heroAttackDuration;
@@ -85,7 +85,7 @@ public class Hero extends Unit {
 		return new Rectangle(x + heroMotionOffsetX, y + heroMotionOffsetY, heroMotionWidth, heroMotionHeight);
 	}
 	
-	private boolean safeToMove(Direction direction, ArrayList<Unit> units) {
+	private boolean safeToMove(Direction direction, ArrayList<Unit> units, int delta) {
 		Rectangle box = getMotionBox();
 		float newX = box.getX();
 		float newY = box.getY();
@@ -93,11 +93,11 @@ public class Hero extends Unit {
 		switch (direction) {
 		case UP:			// leaving this empty equates to "UP || DOWN"
 		case DOWN:
-			newY = newY + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
+			newY = newY + delta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
 			break;
 		case LEFT:
 		case RIGHT:
-			newX = newX + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
+			newX = newX + delta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
 			break;
 		}
 		
@@ -121,25 +121,25 @@ public class Hero extends Unit {
 	}
 
 	// TODO: use doubles instead of floats throughout?
-	public void move(Direction direction, ArrayList<Unit> units) {
+	public void move(Direction direction, ArrayList<Unit> units, int delta) {
 		switch(direction) {
 		case LEFT:
 		case RIGHT:
 			facingRight = (direction == Direction.RIGHT ? true : false);
-			if (safeToMove(direction, units)) {
-				x = x + heroDelta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
+			if (safeToMove(direction, units, delta)) {
+				x = x + delta * (direction == Direction.RIGHT ? heroSpeed : -heroSpeed);
 			}
 			break;
 		case UP:
 		case DOWN:
-			if (safeToMove(direction, units)) {
-				y = y + heroDelta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
+			if (safeToMove(direction, units, delta)) {
+				y = y + delta * (direction == Direction.DOWN ? heroSpeed : -heroSpeed);
 			}
 			break;
 		}
 
 		sprite = (facingRight ? walkRight : walkLeft);
-		sprite.update(animationDelta);
+		sprite.update(delta);
 	}
 	
 	public void attack(ArrayList<Unit> units) {
@@ -156,7 +156,7 @@ public class Hero extends Unit {
 		}
 	}
 	
-	public void checkAttack() {
+	public void checkAttack(int delta) {
 		if (target != null && target.isDead()) {
 			target = null;
 		}
@@ -178,7 +178,7 @@ public class Hero extends Unit {
 			}
 		}
 		
-		sprite.update(animationDelta);
+		sprite.update(delta);
 	}
 	
 	// TODO: check all access levels (protected, etc.)
@@ -186,6 +186,5 @@ public class Hero extends Unit {
 	// TODO: move to Unit??
 	public void idle() {
 		sprite = (facingRight ? idleRight : idleLeft);
-		sprite.update(heroDelta);
 	}
 }

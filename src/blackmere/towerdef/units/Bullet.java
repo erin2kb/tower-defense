@@ -20,7 +20,7 @@ public class Bullet extends Unit {
 		super(lv, startX, startY, bulletMaxHP, bulletDamage);
 		
 		idleFrames = new Image[bulletNumIdleFrames];
-		idleFrames[0] = new Image("res/bullet.png");
+		idleFrames[0] = new Image("blackmere/towerdef/res/bullet.png");
 		idleDurationArray = new int[1];
 		idleDurationArray[0] = bulletIdleDuration;
 		
@@ -44,8 +44,8 @@ public class Bullet extends Unit {
 		return getBoundingBox();
 	}
 	
-	public void move() {
-		x += bulletDelta * bulletSpeed;
+	public void move(int delta) {
+		x += delta * bulletSpeed;
 		
 		if (x > rightBound) {
 			// it went off the screen, so it's no longer in play
