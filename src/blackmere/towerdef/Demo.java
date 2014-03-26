@@ -36,7 +36,7 @@ public class Demo extends BasicGameState {
 	private ArrayList<Unit> allUnits;
 	private ArrayList<TowerButton> towerButtons;
 	private Hero activeHero;
-	private int currentEnergy, enemiesSpawned, enemiesKilled, spawnDelay;
+	private int currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
 	private boolean buildMode;
 	private long lastSpawn;
 		
@@ -50,6 +50,8 @@ public class Demo extends BasicGameState {
 		currentEnergy = initialEnergy;
 		enemiesSpawned = 1;		// the first enemy, which we spawn here
 		enemiesKilled = 0;
+		heroKills = 0;
+		towerKills = 0;
 		spawnDelay = firstSpawnDelay;
 		lastSpawn = System.currentTimeMillis();
 		buildMode = false;
@@ -108,6 +110,10 @@ public class Demo extends BasicGameState {
 		
 		g.drawString((int) currentHP + "/" + (int) maxHP, HPTextXPos + HPTextOffset, HPTextYPos);
 		
+		// draw the kill counts
+		g.setColor(Color.black);
+		g.drawString("Hero Kills: " + heroKills + "   Tower Kills: " + towerKills, killTextXPos, killTextYPos);
+		
 		// draw the UI buttons
 		for (Button b : towerButtons) {
 			b.draw(g);
@@ -160,6 +166,7 @@ public class Demo extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame manager, int delta)
 			throws SlickException {
 		if (enemiesKilled >= numEnemiesTotal) {
+			render(container, manager, container.getGraphics());	// render one last time, to show updated kill counts
 			Image bg = new Image(windowWidth, windowHeight);
 			container.getGraphics().copyArea(bg, 0, 0);
 			((Victory) gameManager.getState(victoryID)).setBackground(bg);
@@ -263,7 +270,7 @@ public class Demo extends BasicGameState {
 		
 		for (Unit u : getActiveUnits()) {
 			if (u instanceof Enemy && b.detectBulletCollision((Enemy) u)) {
-				u.takeHit(b.getDamage());
+				u.takeHit(b.getDamage(), b);
 				b.die();
 				return;
 			}
@@ -335,8 +342,14 @@ public class Demo extends BasicGameState {
 	}
 	
 	//
-	public void anotherOneBitesTheDust() {
+	public void anotherOneBitesTheDust(Unit killer) {
 		enemiesKilled++;
+		
+		if (killer instanceof Hero) {
+			heroKills++;
+		} else {
+			towerKills++;
+		}
 	}
 	
 	//

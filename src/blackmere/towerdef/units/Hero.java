@@ -173,7 +173,7 @@ public class Hero extends Unit {
 			long time = System.currentTimeMillis();
 			
 			if (time - lastAttackUpdate >= heroAttackDelay) {
-				target.takeHit(getDamage());
+				target.takeHit(getDamage(), this);
 				damageDone = true;
 			}
 		}

@@ -35,6 +35,8 @@ public class Constants {
 	public final static int HPTextXPos = resTextXPos;
 	public final static int HPTextYPos = windowHeight - 34;
 	public final static int HPTextOffset = 30;		// TODO: consolidate?
+	public final static int killTextXPos = windowWidth - 300;
+	public final static int killTextYPos = HPTextYPos;
 	public final static int UIButtonOffset = 2;
 	public final static int UIButtonXPos = UIButtonOffset;
 	public final static int UIButtonYPos = tileSize + UIButtonOffset;

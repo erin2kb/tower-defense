@@ -109,7 +109,7 @@ public class Enemy extends Unit {
 			long time = System.currentTimeMillis();
 			
 			if (time - lastAttackUpdate >= enemyAttackDelay) {
-				target.takeHit(getDamage());
+				target.takeHit(getDamage(), this);
 				lastAttackUpdate = time;
 			}
 		}

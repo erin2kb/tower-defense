@@ -15,6 +15,7 @@ public abstract class Unit {
 	protected long lastHitUpdate, lastAttackUpdate;
 	protected Rectangle healthBar, healthGauge;
 	protected Demo level;	// TODO: do this a better way
+	protected Unit killer;	// TODO: use an enum instead?
 	
 	public Unit(Demo lv, float startX, float startY, int HP, int dmg) {
 		level = lv;
@@ -26,6 +27,7 @@ public abstract class Unit {
 		dead = false;
 		attacking = false;
 		hit = false;
+		killer = null;
 		lastHitUpdate = System.currentTimeMillis();
 		lastAttackUpdate = System.currentTimeMillis();
 		healthBar = new Rectangle(x + healthBarOffsetX, y - healthBarOffsetY, healthBarWidth, healthBarHeight);
@@ -101,7 +103,7 @@ public abstract class Unit {
 	
 	public void die() {
 		if (this instanceof Enemy) {
-			level.anotherOneBitesTheDust();
+			level.anotherOneBitesTheDust(killer);
 		}
 		
 		dead = true;
@@ -127,15 +129,20 @@ public abstract class Unit {
 		}
 	}
 	
-	public void takeHit(float damageAmount) {
+	public void takeHit(float damageAmount, Unit attacker) {
 		// if already dead, don't take any more damage
 		if (currentHP <= 0) {
 			return;
 		}
 		
 		hit = true;
-		currentHP -= damageAmount;
 		lastHitUpdate = System.currentTimeMillis();
+		currentHP -= damageAmount;
+		
+		// if killed by this blow, acknowledge the killer
+		if (currentHP <= 0) {
+			killer = attacker;
+		}
 	}
 	
 	// TODO: document reason for dying here (final red flash)
