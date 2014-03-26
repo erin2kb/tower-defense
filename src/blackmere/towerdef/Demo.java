@@ -15,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import blackmere.towerdef.ui.Button;
 import blackmere.towerdef.ui.GameOver;
+import blackmere.towerdef.ui.PauseButton;
 import blackmere.towerdef.ui.PauseMenu;
 import blackmere.towerdef.ui.TowerButton;
 import blackmere.towerdef.ui.Victory;
@@ -35,6 +36,7 @@ public class Demo extends BasicGameState {
 	private Image map;
 	private ArrayList<Unit> allUnits;
 	private ArrayList<TowerButton> towerButtons;
+	private PauseButton pauseButton;
 	private Hero activeHero;
 	private int currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
 	private boolean buildMode;
@@ -62,13 +64,15 @@ public class Demo extends BasicGameState {
 		towerButtons = new ArrayList<TowerButton>();
 		Image towerButtonImage = new Image("blackmere/towerdef/res/towerButton.png");
 		Image towerButtonLocked = new Image("blackmere/towerdef/res/towerButtonLocked.png");
-		TowerButton towerButtonBlue = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos, UIButtonSize, UIButtonSize);
-		TowerButton towerButtonPurple = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + tileSize, UIButtonSize, UIButtonSize);	// TODO: more precise pos; better init?
-		TowerButton towerButtonRed = new TowerButton(towerButtonImage, towerButtonLocked, UIButtonXPos, UIButtonYPos + 2 * tileSize, UIButtonSize, UIButtonSize);	// TODO: use the actual images
+		TowerButton towerButtonBlue = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos, towerButtonSize, towerButtonSize);
+		TowerButton towerButtonPurple = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos + tileSize, towerButtonSize, towerButtonSize);	// TODO: more precise pos; better init?
+		TowerButton towerButtonRed = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos + 2 * tileSize, towerButtonSize, towerButtonSize);	// TODO: use the actual images
 		towerButtonBlue.unlock();
 		towerButtons.add(towerButtonBlue);
 		towerButtons.add(towerButtonPurple);
 		towerButtons.add(towerButtonRed);
+		Image pauseButtonImage = new Image("blackmere/towerdef/res/pauseButton.png");
+		pauseButton = new PauseButton(pauseButtonImage, pauseButtonXPos, pauseButtonYPos, pauseButtonSize, pauseButtonSize);
 	}
 
 	//
@@ -115,6 +119,8 @@ public class Demo extends BasicGameState {
 		g.drawString("Hero Kills: " + heroKills + "   Tower Kills: " + towerKills, killTextXPos, killTextYPos);
 		
 		// draw the UI buttons
+		pauseButton.draw(g);
+		
 		for (Button b : towerButtons) {
 			b.draw(g);
 		}
@@ -189,10 +195,7 @@ public class Demo extends BasicGameState {
 		Input input = container.getInput();
 		
 		if (input.isKeyPressed(Input.KEY_P)) {
-			Image bg = new Image(windowWidth, windowHeight);
-			container.getGraphics().copyArea(bg, 0, 0);
-			((PauseMenu) gameManager.getState(pauseID)).setBackground(bg);
-			gameManager.enterState(pauseID);
+			pauseGame(container);
 		}
 		
 		for (Unit u : getActiveUnits()) {
@@ -282,6 +285,15 @@ public class Demo extends BasicGameState {
 		//System.out.println("Click at " + x + "," + y);		// debug line
 		
 		// TODO: process UI clicks first
+		if (pauseButton.getBoundingBox().contains(x, y)) {
+			try {
+				pauseGame(gameContainer);
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		if (towerButtons.get(0).getBoundingBox().contains(x, y)) {
 			buildMode = !buildMode;
 			towerButtons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
@@ -357,5 +369,13 @@ public class Demo extends BasicGameState {
 		int lane = 1 + (int)(Math.random() * ((5 - 1) + 1));
 		enemiesSpawned++;
 		allUnits.add(new Enemy(this, enemyStartX, tileSize * lane));
+	}
+	
+	//
+	private void pauseGame(GameContainer container) throws SlickException {
+		Image bg = new Image(windowWidth, windowHeight);
+		container.getGraphics().copyArea(bg, 0, 0);
+		((PauseMenu) gameManager.getState(pauseID)).setBackground(bg);
+		gameManager.enterState(pauseID);
 	}
 }

@@ -37,10 +37,14 @@ public class Constants {
 	public final static int HPTextOffset = 30;		// TODO: consolidate?
 	public final static int killTextXPos = windowWidth - 300;
 	public final static int killTextYPos = HPTextYPos;
-	public final static int UIButtonOffset = 2;
-	public final static int UIButtonXPos = UIButtonOffset;
-	public final static int UIButtonYPos = tileSize + UIButtonOffset;
-	public final static int UIButtonSize = 58;
+	public final static int towerButtonOffset = 2;
+	public final static int towerButtonXPos = towerButtonOffset;
+	public final static int towerButtonYPos = tileSize + towerButtonOffset;
+	public final static int towerButtonSize = 58;
+	public final static int pauseButtonXPos = windowWidth - 56;
+	public final static int pauseButtonYPos = resTextYPos - 10;
+	public final static int pauseButtonSize = 40;
+	
 	
 	// Constants used by Unit
 	public final static int rightBound = 620;
