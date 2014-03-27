@@ -6,9 +6,15 @@
  <tileset firstgid="2" name="UI" tilewidth="62" tileheight="62">
   <image source="dream.png" width="62" height="62"/>
  </tileset>
+ <tileset firstgid="3" name="Grass2" tilewidth="62" tileheight="62">
+  <image source="grassTile.png" width="62" height="62"/>
+ </tileset>
+ <tileset firstgid="4" name="Dark UI" tilewidth="62" tileheight="62">
+  <image source="nightmare.png" width="62" height="62"/>
+ </tileset>
  <layer name="Tile Layer 1" width="11" height="7">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NiYGBgIgEzEoGHqlpiMQDn5PQ0NAEAAA==
+   H4sIAAAAAAAAA2NiYGBgIgEzE4GHqlpiMQAXgELfNAEAAA==
   </data>
  </layer>
 </map>

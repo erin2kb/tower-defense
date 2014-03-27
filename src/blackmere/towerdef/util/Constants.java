@@ -17,6 +17,9 @@ public class Constants {
 	public final static int windowWidth = 682;
 	public final static int windowHeight = 434;
 	public final static int tileSize = 62;
+	public final static int numMaps = 12;
+	public final static String mapPrefix = "blackmere/towerdef/res/map";
+	public final static String mapPostfix = ".png";
 	public final static int initialEnergy = 200;
 	public final static int numEnemiesTotal = 20;
 	public final static int firstSpawnDelay = 10000;

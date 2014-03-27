@@ -119,6 +119,11 @@ public class Enemy extends Unit {
 		return x < leftBound - 10;
 	}
 	
+	//
+	public int getProgress() {		
+		return (int) ((rightBound - x) / tileSize) + 2;		// not sure why, but +2 gets the behavior I want...
+	}
+	
 	// TODO: only detect collisions if in lane -- need to reconsider this in order to use for enemies (since heroes not confined to lanes, but still need to be attacked)
 	// TODO: document: enemy 'invincible' when flashing red (test this)...
 	// TODO: ...or, change this behavior and reset flash on each hit (need to account for individual delay between bullet/hero so no instant-kills)

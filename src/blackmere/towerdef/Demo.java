@@ -32,13 +32,12 @@ public class Demo extends BasicGameState {
 	
 	private StateBasedGame gameManager;
 	private GameContainer gameContainer;	// TODO: clean this up (some f'ns use 'container' param instead)
-	//private TiledMap demoMap;
-	private Image map;
+	private Image[] maps;
 	private ArrayList<Unit> allUnits;
 	private ArrayList<TowerButton> towerButtons;
 	private PauseButton pauseButton;
 	private Hero activeHero;
-	private int currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
+	private int mapIndex, currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
 	private boolean buildMode;
 	private long lastSpawn;
 		
@@ -46,9 +45,14 @@ public class Demo extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame manager) throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		//demoMap = new TiledMap("res/basicMap.tmx");
-		// TODO: go back to using TiledMap??
-		map = new Image("blackmere/towerdef/res/basicMap2.png");
+		maps = new Image[numMaps];
+		
+		// TODO: utility f'n
+		for (int i = 0; i < numMaps; i++) {
+			maps[i] = new Image(mapPrefix + i + mapPostfix);
+		}
+		
+		mapIndex = 0;
 		currentEnergy = initialEnergy;
 		enemiesSpawned = 1;		// the first enemy, which we spawn here
 		enemiesKilled = 0;
@@ -77,8 +81,7 @@ public class Demo extends BasicGameState {
 
 	//
 	public void render(GameContainer container, StateBasedGame manager, Graphics g) throws SlickException {
-		//demoMap.render(0, 0);
-		map.draw(0, 0);
+		maps[mapIndex].draw(0, 0);
 		
 		// draw the UI text elements
 		g.setColor(Color.black);
@@ -171,6 +174,8 @@ public class Demo extends BasicGameState {
 	//
 	public void update(GameContainer container, StateBasedGame manager, int delta)
 			throws SlickException {
+		setMap();
+		
 		if (enemiesKilled >= numEnemiesTotal) {
 			render(container, manager, container.getGraphics());	// render one last time, to show updated kill counts
 			Image bg = new Image(windowWidth, windowHeight);
@@ -377,5 +382,18 @@ public class Demo extends BasicGameState {
 		container.getGraphics().copyArea(bg, 0, 0);
 		((PauseMenu) gameManager.getState(pauseID)).setBackground(bg);
 		gameManager.enterState(pauseID);
+	}
+	
+	//
+	private void setMap() {
+		int index = 0;
+		
+		for (Unit u : getActiveUnits()) {
+			if (! u.isDead() && u instanceof Enemy && ((Enemy) u).getProgress() > index) {
+				index = ((Enemy) u).getProgress();
+			}
+		}
+		
+		mapIndex = index;
 	}
 }
