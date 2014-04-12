@@ -20,7 +20,7 @@ public class Constants {
 	public final static int numMaps = 12;
 	public final static String mapPrefix = "blackmere/towerdef/res/map";
 	public final static String mapPostfix = ".png";
-	public final static int initialEnergy = 200;
+	public final static int initialEnergy = 300;
 	public final static int numEnemiesTotal = 20;
 	public final static int firstSpawnDelay = 10000;
 	public final static int secondSpawnDelay = 6000;
@@ -66,11 +66,11 @@ public class Constants {
 	public final static int heroOffsetX = 0;
 	public final static int heroOffsetY = 11;	
 	public final static int heroTargetWidth = 24;
-	public final static int heroTargetHeight = 48;
+	public final static int heroTargetHeight = 46;
 	public final static int heroTargetOffsetX = 18;
 	public final static int heroTargetOffsetY = 12;
-	public final static int heroMotionWidth = 30;
-	public final static int heroMotionHeight = 47;
+	public final static int heroMotionWidth = 24;		// TODO: merge target and motion logic??
+	public final static int heroMotionHeight = 48;
 	public final static int heroMotionOffsetX = 18;
 	public final static int heroMotionOffsetY = 12;
 	public final static int heroAttackWidth = 13;
@@ -84,7 +84,7 @@ public class Constants {
 	public final static int heroIdleDuration = 10000;	// doesn't actually matter at this point, since there's only one frame in the animation
 	public final static int heroWalkDuration = 150;
 	public final static int heroAttackDuration = 200;
-	public final static int heroMaxHP = 200;
+	public final static int heroMaxHP = 300;
 	public final static int heroDamage = 10;
 	public final static float heroSpeed = 0.15f;
 	public final static int heroAttackDelay = 1100;		// TODO: consolidate delays? is this delay correct?
@@ -92,10 +92,10 @@ public class Constants {
 	// TODO: adjust boxes so that when hero stays still (and enemy comes), hero attack looks like it's properly hitting the enemy
 	
 	// Constants used by Enemy
-	public final static int enemyWidth = 62;
-	public final static int enemyHeight = 45;
+	public final static int enemyWidth = 78;
+	public final static int enemyHeight = 54;
 	public final static int enemyOffsetX = 0;
-	public final static int enemyOffsetY = 18;
+	public final static int enemyOffsetY = 6;
 	public final static int enemyTargetWidthBullet = 30;
 	public final static int enemyTargetHeightBullet = 30;
 	public final static int enemyTargetOffsetBulletX = 24;
@@ -104,24 +104,25 @@ public class Constants {
 	public final static int enemyTargetHeightHero = 20;
 	public final static int enemyTargetOffsetHeroX = 18;
 	public final static int enemyTargetOffsetHeroY = 21;
-	public final static int enemyMotionWidth = 45;
-	public final static int enemyMotionHeight = 30;
-	public final static int enemyMotionOffsetX = 8;	// TODO: play with these values; bullets rarely visible when enemy right on top of tower; enemy looks too far to attack hero; make sure it can still reach hero, though
-	public final static int enemyMotionOffsetY = enemyOffsetY;
-	public final static int enemyAttackWidth = 18;
-	public final static int enemyAttackHeight = 40;
-	public final static int enemyAttackOffsetX = 0;
+	public final static int enemyMotionWidth = 30;
+	public final static int enemyMotionHeight = 22;
+	public final static int enemyMotionOffsetX = 30;	// TODO: play with these values; bullets rarely visible when enemy right on top of tower; but don't mess up coordination with hero (use new box for tower?)
+	public final static int enemyMotionOffsetY = enemyOffsetY + 6;
+	public final static int enemyAttackWidth = 20;
+	public final static int enemyAttackHeight = 23;		// TODO: make relative to motion box?
+	public final static int enemyAttackOffsetX = 18;
 	public final static int enemyAttackOffsetY = 11;
 	public final static int enemyNumIdleFrames = 1;
 	public final static int enemyNumWalkFrames = 8;
-	public final static int enemyNumAttackFrames = 8;
+	public final static int enemyNumAttackFrames = 4;
 	public final static int enemyIdleDuration = 10000;	// doesn't actually matter at this point, since there's only one frame in the animation
-	public final static int enemyWalkDuration = 150;	// TODO: if same across all units, then consolidate (check for other consolidation opportunities too)
-	public final static int enemyAttackDuration = 200;
+	public final static int enemyWalkDuration = 140;	// TODO: if same across all units, then consolidate (check for other consolidation opportunities too)
+	public final static int enemyAttackDuration = 260;
 	public final static int enemyMaxHP = 120;
 	public final static int enemyDamage = 10;
-	public final static float enemySpeed = 0.02f;
-	public final static int enemyAttackDelay = 3000;
+	public final static float enemySpeed = 0.022f;
+	public final static int enemyAttackDelay = 1400;
+	public final static int enemyHitDelay = 600;
 	
 	// Constants used by Tower
 	public final static int towerWidth = 52;
@@ -134,7 +135,7 @@ public class Constants {
 	public final static int towerMaxHP = 80;
 	public final static int towerDamage = 0;	// since towers themselves don't do damage (only their bullets do)
 	public final static int towerAttackDelay = 2200;
-	public final static int towerGenDelay = 5000;
+	public final static int towerGenDelay = 8000;	// 5000
 	public final static int towerCostBlue = 100;
 	public final static int cheapestTowerCost = towerCostBlue;
 	public final static int energyRateBlue = 10;

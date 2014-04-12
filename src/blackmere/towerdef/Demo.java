@@ -262,7 +262,7 @@ public class Demo extends BasicGameState {
 	}
 	
 	private void enemyLogic(Enemy e, int delta) throws SlickException {
-		e.checkAttack(getActiveUnits());
+		e.checkAttack(getActiveUnits(), delta);
 		e.move(getActiveUnits(), delta);
 		
 		if (e.hasWon()) {

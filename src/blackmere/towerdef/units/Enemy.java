@@ -13,22 +13,45 @@ import blackmere.towerdef.util.Utility;
 import static blackmere.towerdef.util.Constants.*;
 
 public class Enemy extends Unit {
-	private Image[] idleLeftFrames;	//walkLeftFrames, attackLeftFrames;
-	private int[] idleDurationArray; //walkDurationArray, attackDurationArray;
-	private Animation idleLeft; //walkLeft, attackLeft;
+	private Image[] idleFrames,	walkFrames, attackFrames;
+	private int[] idleDurationArray, walkDurationArray, attackDurationArray;
+	private Animation idle, walk, attack;
 	private Unit target;
+	private boolean damageDone;
 	
 	public Enemy(Demo lv, float startX, float startY) throws SlickException {
 		super(lv, startX, startY, enemyMaxHP, enemyDamage);
+		healthOffsetX = healthOffsetX + 10;	// since enemy is wider than other sprites
 		target = null;
+		damageDone = false;
 		
-		idleLeftFrames = new Image[enemyNumIdleFrames];
-		idleLeftFrames[0] = new Image("blackmere/towerdef/res/enemy/wl1.png");
+		walkFrames = new Image[enemyNumWalkFrames];
+		attackFrames = new Image[enemyNumAttackFrames];
+		idleFrames = new Image[enemyNumIdleFrames];
+		idleFrames[0] = new Image("blackmere/towerdef/res/enemy/spider/w1.png");
+		walkDurationArray = new int[enemyNumWalkFrames];
+		attackDurationArray = new int[enemyNumAttackFrames];
 		idleDurationArray = new int[enemyNumIdleFrames];
 		idleDurationArray[0] = enemyIdleDuration;
 		
-		idleLeft = new Animation(idleLeftFrames, idleDurationArray, false);
-		setSprite(idleLeft);
+		for (int i = 0; i < enemyNumWalkFrames; i++) {
+			int index = i + 1;
+			String name = "blackmere/towerdef/res/enemy/spider/old/w" + index + ".png";		// TODO: decide on a final set and remove 'old'
+			walkFrames[i] = new Image(name);
+			walkDurationArray[i] = enemyWalkDuration;
+		}
+		
+		for (int i = 0; i < enemyNumAttackFrames; i++) {
+			int index = i + 1;
+			String name = "blackmere/towerdef/res/enemy/spider/a" + index + ".png";
+			attackFrames[i] = new Image(name);
+			attackDurationArray[i] = enemyAttackDuration;
+		}
+		
+		attack = new Animation(attackFrames, attackDurationArray, false);
+		walk = new Animation(walkFrames, walkDurationArray, false);
+		idle = new Animation(idleFrames, idleDurationArray, false);
+		setSprite(idle);
 	}
 	
 	public Rectangle getBoundingBox() {
@@ -77,6 +100,14 @@ public class Enemy extends Unit {
 	public void move(ArrayList<Unit> units, int delta) {
 		if (safeToMove(units, delta) && !attacking) {
 			x -= delta * enemySpeed;
+			this.setSprite(walk);
+			sprite.update(delta);
+		} else if (attacking) {
+			this.setSprite(attack);
+			sprite.update(delta);	// TODO: necessary?
+		} else {
+			this.setSprite(idle);
+			sprite.update(delta);	// TODO: necessary?
 		}
 	}
 	
@@ -86,12 +117,14 @@ public class Enemy extends Unit {
 					(u instanceof Tower && ((Tower) u).withinRange(this))) {
 				lastAttackUpdate = System.currentTimeMillis();
 				attacking = true;
+				sprite = attack;
+				sprite.stopAt(enemyNumAttackFrames - 1);
 				target = u;
 			} 
 		}
 	}
 	
-	public void checkAttack(ArrayList<Unit> units) {		
+	public void checkAttack(ArrayList<Unit> units, int delta) {		
 		if (target != null) {
 			if (target.isDead() ||
 					(target instanceof Hero && !((Hero) target).withinRange(this)) ||
@@ -105,14 +138,25 @@ public class Enemy extends Unit {
 			attack(units);	// find new target; do in hero?? consolidate with hero??? make so it doesn't get called so much??
 		}
 		
-		if (target != null) {
+		// TODO: consolidate with lower branch (also uses time) - compatible??
+		if (sprite.isStopped() && System.currentTimeMillis() - lastAttackUpdate >= enemyAttackDelay) {
+			damageDone = false; // TODO: document why this is needed
+			sprite.restart();	// TODO: this was in hero; but why is it needed?
+			lastAttackUpdate = System.currentTimeMillis();
+			return;
+		}
+		
+		if (target != null && !damageDone) {
 			long time = System.currentTimeMillis();
-			
-			if (time - lastAttackUpdate >= enemyAttackDelay) {
+
+			if (time - lastAttackUpdate >= enemyHitDelay) {
 				target.takeHit(getDamage(), this);
 				lastAttackUpdate = time;
+				damageDone = true;
 			}
 		}
+		
+		sprite.update(delta);
 	}
 	
 	public boolean hasWon() {

@@ -16,11 +16,13 @@ public abstract class Unit {
 	protected Rectangle healthBar, healthGauge;
 	protected Demo level;	// TODO: do this a better way
 	protected Unit killer;	// TODO: use an enum instead?
+	protected int healthOffsetX;
 	
 	public Unit(Demo lv, float startX, float startY, int HP, int dmg) {
 		level = lv;
 		x = startX;
 		y = startY;
+		healthOffsetX = healthBarOffsetX;	// only enemy uses a different value here (thus far)
 		damage = dmg;
 		maxHP = HP;
 		currentHP = maxHP;
@@ -53,9 +55,12 @@ public abstract class Unit {
 		}
 				
 		// DEBUG: draw a bounding box
-		/*Rectangle box = (this instanceof Hero ? getAttackBox() : getTargetBox());
+		/* Rectangle box = (this instanceof Enemy ? getMotionBox() : getMotionBox());
+		Rectangle box2 = getAttackBox();
 		g.setColor(Color.red);
-		g.draw(box); */
+		g.draw(box);
+		g.setColor(Color.blue);
+		g.draw(box2); */
 	}
 	
 	public void drawHealthBar(Graphics g) {
@@ -76,8 +81,8 @@ public abstract class Unit {
 		}
 
 		// update the health bar; TODO: do somewhere that's called less often?
-		healthBar.setLocation(x + healthBarOffsetX, y - healthBarOffsetY);
-		healthGauge.setLocation(x + healthBarOffsetX, y - healthBarOffsetY);
+		healthBar.setLocation(x + healthOffsetX, y - healthBarOffsetY);
+		healthGauge.setLocation(x + healthOffsetX, y - healthBarOffsetY);
 		healthGauge.setWidth((currentHP / maxHP) * healthBarWidth);
 
 		g.fill(healthGauge);
