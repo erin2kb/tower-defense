@@ -16,11 +16,19 @@ public class Bullet extends Unit {
 	private int[] idleDurationArray;
 	private Animation idle;
 
-	public Bullet(Demo lv, float startX, float startY) throws SlickException {
+	public Bullet(Demo lv, float startX, float startY, boolean isBlue) throws SlickException {
 		super(lv, startX, startY, bulletMaxHP, bulletDamage);
+		String color;
+		
+		if (isBlue) {
+			color = "Blue";
+		} else {	
+			color = "Purple";
+			setDamage(bulletDamage + bulletExtraDamage);	// TODO: this is a super hack... fix it
+		}
 		
 		idleFrames = new Image[bulletNumIdleFrames];
-		idleFrames[0] = new Image("blackmere/towerdef/res/bullet.png");
+		idleFrames[0] = new Image("blackmere/towerdef/res/bullet" + color + ".png");
 		idleDurationArray = new int[1];
 		idleDurationArray[0] = bulletIdleDuration;
 		

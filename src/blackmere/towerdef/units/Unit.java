@@ -159,6 +159,11 @@ public abstract class Unit {
 		}
 	}
 	
+	// TODO: remove this after fixing the hack in Bullet
+	protected void setDamage(int dmg) {
+		damage = dmg;
+	}
+	
 	public boolean withinRange(Unit u) {
 		// special case for towers
 		if (u instanceof Tower) {

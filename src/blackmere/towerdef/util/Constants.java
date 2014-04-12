@@ -149,6 +149,7 @@ public class Constants {
 	public final static int bulletIdleDuration = 10000;	// doesn't actually matter at this point, since there's only one frame in the animation
 	public final static int bulletMaxHP = 10;	// 10 is a dummy value, since bullets don't really have HP (it can be any number > 0)
 	public final static int bulletDamage = 10;
+	public final static int bulletExtraDamage = 2;
 	public final static float bulletSpeed = 0.1f;
 	
 	// Constants used by the menus (i.e. Main, Pause, Game Over)
@@ -169,5 +170,5 @@ public class Constants {
 	public final static int victoryButtonOffsetX = 30;
 	public final static int victoryButtonWidth = 110;
 	public final static Color buttonColor = new Color(191, 172, 226);
-	public final static String gameVersion = "1.1";
+	public final static String gameVersion = "1.2";
 }

@@ -20,8 +20,17 @@ public class TowerButton extends Button {
 		outline = new Rectangle(x - 1, y - 1, width + 2, height + 2);	// TODO: un-hard code
 	}
 	
+	// TODO: remove if no longer used
 	public void toggleSelect() {
 		selected = !selected;		// TODO: make outline bolder
+	}
+	
+	public void select() {
+		selected = true;		// TODO: make outline bolder
+	}
+	
+	public void deselect() {
+		selected = false;		// TODO: make outline bolder
 	}
 	
 	public void unlock() {

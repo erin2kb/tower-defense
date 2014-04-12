@@ -38,7 +38,7 @@ public class Demo extends BasicGameState {
 	private PauseButton pauseButton;
 	private Hero activeHero;
 	private int mapIndex, currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
-	private boolean buildMode;
+	private boolean buildBlue;
 	private long lastSpawn;
 		
 	//
@@ -60,18 +60,21 @@ public class Demo extends BasicGameState {
 		towerKills = 0;
 		spawnDelay = firstSpawnDelay;
 		lastSpawn = System.currentTimeMillis();
-		buildMode = false;
+		buildBlue = true;
 		activeHero = new Hero(this, heroStartX, heroStartY);
 		allUnits = new ArrayList<Unit>();
 		allUnits.add(activeHero);
 		allUnits.add(new Enemy(this, enemyStartX, enemyStartY));	// TODO: make separate Debug class? Level superclass?			
 		towerButtons = new ArrayList<TowerButton>();
-		Image towerButtonImage = new Image("blackmere/towerdef/res/towerButton.png");
+		Image towerButtonImageBlue = new Image("blackmere/towerdef/res/towerButtonBlue.png");
+		Image towerButtonImagePurple = new Image("blackmere/towerdef/res/towerButtonPurple.png");
 		Image towerButtonLocked = new Image("blackmere/towerdef/res/towerButtonLocked.png");
-		TowerButton towerButtonBlue = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos, towerButtonSize, towerButtonSize);
-		TowerButton towerButtonPurple = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos + tileSize, towerButtonSize, towerButtonSize);	// TODO: more precise pos; better init?
-		TowerButton towerButtonRed = new TowerButton(towerButtonImage, towerButtonLocked, towerButtonXPos, towerButtonYPos + 2 * tileSize, towerButtonSize, towerButtonSize);	// TODO: use the actual images
+		TowerButton towerButtonBlue = new TowerButton(towerButtonImageBlue, towerButtonLocked, towerButtonXPos, towerButtonYPos, towerButtonSize, towerButtonSize);
+		TowerButton towerButtonPurple = new TowerButton(towerButtonImagePurple, towerButtonLocked, towerButtonXPos, towerButtonYPos + tileSize, towerButtonSize, towerButtonSize);	// TODO: more precise pos; better init?
+		TowerButton towerButtonRed = new TowerButton(towerButtonImageBlue, towerButtonLocked, towerButtonXPos, towerButtonYPos + 2 * tileSize, towerButtonSize, towerButtonSize);	// TODO: use the actual images
 		towerButtonBlue.unlock();
+		towerButtonBlue.select();		// start game with this one selected
+		towerButtonPurple.unlock();
 		towerButtons.add(towerButtonBlue);
 		towerButtons.add(towerButtonPurple);
 		towerButtons.add(towerButtonRed);
@@ -300,16 +303,21 @@ public class Demo extends BasicGameState {
 		}
 		
 		if (towerButtons.get(0).getBoundingBox().contains(x, y)) {
-			buildMode = !buildMode;
-			towerButtons.get(0).toggleSelect();	// TODO: do for all buttons in list, generically
-			return;		// TODO: consolidate with branch below?
+			buildBlue = true;		// TODO: handle this better, more generically, for all colors, and possibly re-allow deselecting
+			towerButtons.get(0).select();	// TODO: do for all buttons in list, generically
+			towerButtons.get(1).deselect();	// TODO: do this better
+			return;		// TODO: consolidate with !buildBlue branch below?
+		} else if (towerButtons.get(1).getBoundingBox().contains(x, y)) {
+			buildBlue = false;
+			towerButtons.get(0).deselect();
+			towerButtons.get(1).select();
 		}
 		
-		if (!buildMode) {
+		/*if (!buildBlue) {
 			return;		// don't process clicks unless we're building
-		}
+		} */
 		
-		// don't process build clicks that are in the UI
+		// don't process build clicks that are in the UI area (but not on a button)
 		if (x <= leftBound || x >= rightBound || y <= upBound || y >= downBound) {	// TODO: the top and bottom boundaries seem a tad off
 			return;	// TODO: consolidate
 		}
@@ -324,7 +332,7 @@ public class Demo extends BasicGameState {
 		Tower t = null;
 		
 		try {
-			t = new Tower(this, towerX, towerY);
+			t = (buildBlue ? new Tower(this, towerX, towerY, true) : new Tower(this, towerX, towerY, false));
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

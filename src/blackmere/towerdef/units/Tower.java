@@ -16,16 +16,26 @@ public class Tower extends Unit {
 	private Animation idle;
 	private long lastShotFired, lastEnergyGen;
 	private int buildCost, energyRate;
+	private boolean blue;
 
-	public Tower(Demo lv, float startX, float startY) throws SlickException {
+	public Tower(Demo lv, float startX, float startY, boolean isBlue) throws SlickException {
 		super(lv, startX, startY, towerMaxHP, towerDamage);
 		lastShotFired = 0;
 		buildCost = towerCostBlue;
 		energyRate = energyRateBlue;
 		lastEnergyGen = System.currentTimeMillis();
+		String color;
+		
+		if (isBlue) {
+			blue = true;
+			color = "Blue";
+		} else {
+			blue = false;		// TODO: do all this logic in a better way
+			color = "Purple";
+		}
 		
 		idleFrames = new Image[towerNumIdleFrames];
-		idleFrames[0] = new Image("blackmere/towerdef/res/tower.png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
+		idleFrames[0] = new Image("blackmere/towerdef/res/tower" + color + ".png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
 		idleDurationArray = new int[towerNumIdleFrames];
 		idleDurationArray[0] = towerIdleDuration;
 		
@@ -92,6 +102,6 @@ public class Tower extends Unit {
 	
 	// TODO: exceptions
 	public Bullet getBullet() throws SlickException {
-		return new Bullet(level, x + towerBulletSpawnOffset, y);
+		return (blue ? new Bullet(level, x + towerBulletSpawnOffset, y, true) : new Bullet(level, x + towerBulletSpawnOffset, y, false));
 	}
 }
