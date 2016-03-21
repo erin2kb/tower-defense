@@ -33,12 +33,12 @@ public class Demo extends BasicGameState {
 	private StateBasedGame gameManager;
 	private GameContainer gameContainer;	// TODO: clean this up (some f'ns use 'container' param instead)
 	private Image[] maps;
-	private ArrayList<Unit> allUnits;
+	private ArrayList<Unit> allUnits;	// TODO [2016 revamp]: was there a reason to put all the units together like this?
 	private ArrayList<TowerButton> towerButtons;
 	private PauseButton pauseButton;
 	private Hero activeHero;
 	private int mapIndex, currentEnergy, enemiesSpawned, enemiesKilled, heroKills, towerKills, spawnDelay;
-	private boolean buildBlue;
+	private boolean buildBlue;	// TODO [2016 revamp]: this feels awfully specific...
 	private long lastSpawn;
 		
 	//
@@ -56,7 +56,7 @@ public class Demo extends BasicGameState {
 		currentEnergy = initialEnergy;
 		enemiesSpawned = 1;		// the first enemy, which we spawn here
 		enemiesKilled = 0;
-		heroKills = 0;
+		heroKills = 0;	// TODO [2016 revamp]: there's probably a better way to init all these zeroes...
 		towerKills = 0;
 		spawnDelay = firstSpawnDelay;
 		lastSpawn = System.currentTimeMillis();

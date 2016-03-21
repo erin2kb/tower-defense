@@ -20,7 +20,7 @@ public class GameManager extends StateBasedGame {
 		super(title);
 	}
 
-	//
+	// TODO [2016 revamp]: what is this function? where is it used?
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new MainMenu());
 		addState(new Demo());
