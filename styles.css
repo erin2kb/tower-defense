@@ -1,0 +1,9 @@
+body { background: #f8ebff; color: #362e52; }
+header { height: 80px; line-height: 1.5em; border: ridge darkblue; margin-bottom: 40px; background: url(img/dream.png) repeat; float: top; font-size: 20px; text-align: center; }
+nav { background: #ffebfa; ; float: left; padding: 30px; width: 160px; height: 340px; border: ridge darkblue; margin-right: 20px; }
+article { display: block; float: center; margin-left: 240px; padding-left: 30px; width: 800px; }
+footer { float: bottom; margin-top: 60px; font-size: 14px; text-align: center; }
+aside { float: left; padding-left: 200px; }
+table { background: #dfd5fe; color: black; text-align: center; }
+h1, h2, h3 { color: black; }
+.highlight { background: #faf0ff; padding: 10px; border: dashed #e6b3ff; }

@@ -1,0 +1,4 @@
+.header { float: top; text-align: center; }
+.nav { display: table; float: left; padding: 30px; width: 160px; height: 340px; border: 2px solid darkblue; }
+.article { display: table; float: center; padding: 30px; width: 800px; }
+.footer { float: bottom; font-size: 14px; text-align: center }

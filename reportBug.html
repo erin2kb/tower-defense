@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Night of a Thousand Bugs :: Report a Bug</title>
+		<meta name="description" content="This is a page to host a Java game I wrote for fun.">
+	</head>
+	<body>
+		<article>
+			<h1>Night of a Thousand Bugs</h1>
+			<p>Sometimes, even the best laid tower defenses can't stop every bug that appears. If you encounter an issue with the game that I missed, please fill out the form below to let me know, and I'll do my best to squash it!</p>
+			<br>
+			<br>
+			<form action="https://www.student.cs.uwaterloo.ca/~ekblackm/reportBug.php" method="post">
+				<b>Your Name:</b> <em>(optional, but I'll give you credit if you include it)</em> <input type="text" name="sender" size="30" value="">
+				<br>
+				<br>
+				<b>Game Version:</b> <em>(optional, but useful to know)</em> <input type="text" name="version" size="10" value="">
+				<br>
+				<br>
+				<b>Description:</b> <em>(please describe the issue, and what you were doing when it occurred)</em>
+				<br>
+				<textarea name="description" rows="6" maxlength="1000" cols="40"></textarea>
+				<br>
+				<br>
+				<input type="submit" name="submit" value="Report Bug">		
+			</form>	
+		</article>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Night of a Thousand Bugs :: Known Issues</title>
+		<meta name="description" content="This is a page to host a Java game I wrote for fun.">
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<body>
+                <header>
+                        <h1>Night of a Thousand Bugs</h1>
+			<img src="img/spider.png" alt=" " width="62" height="62" align="right">
+                </header>
+		<nav>
+			<a href="index.html">News</a> 
+			<br> 
+			<br>
+			<b>Game Info</b>
+			<ul>
+				<li><a href="concept.html">Concept</a></li>
+				<li><a href="units.html">Units</a></li>
+				<li><a href="controls.html">Controls</a></li>
+				<li><a href="issues.html">Known Issues</a></li>
+				<li><a href="requests.html">Feature Requests</a></li>
+			</ul>
+			<br>
+			<a href="download.html">Download</a>
+			<br>
+			<br>
+			<b>Feedback</b>
+			<ul>
+				<li><a href="contact.html">Contact Me</a></li>
+			</ul>
+			<br>
+			<a href="credits.html">Credits</a>
+                        <br>
+		</nav>
+		<article>
+			<p>Among the thousand, these bugs are currently giving us a hard time...</p>
+			<br>
+			<dl>
+				<div class="highlight">
+				<dt>
+					<b>Issue 1:</b> Sometimes enemy health bars don't seem to work
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>I noticed this issue a couple of times while I was playing with the initial enemy spawn rate. I had a bunch of towers firing, but the enemy didn't seem to be taking any damage. Unfortunately, I can't remember if it was actually not dying, or if it was just that the health bar wasn't working. In either case, I haven't come up with a way to reliably reproduce this, and I'm starting to wonder if it might have been an illusion created by Issue 2...</em></p></dd>
+				</div>
+				<br><br>
+				<div class="highlight">
+				<dt>
+					<b>Issue 2:</b> Current target can become hidden beneath other enemies
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>Arguably this is more of a feature request than a bug, but if a hero is blocking two or more enemies while attacking, the enemy taking the attacks is usually completely obscured by the other enemies standing in the same spot. Ideally, the one we're attacking should be the one that we see. This problem may also affect towers firing at multiple overlapping enemies, which could explain Issue 1.</em></p></dd>
+				</div>
+		</article>
+		<aside>
+                        <img src="img/erin.png" alt=" " width="63" height="76">
+                </aside>
+                <br><br>
+                <footer>
+                        <hr>
+                        Webpage and Game &copy; 2014 Erin Blackmere
+                </footer>
+	</body>
+</html>
