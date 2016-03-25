@@ -59,7 +59,7 @@ public class Demo extends BasicGameState {
 		heroKills = 0;	// TODO [2016 revamp]: there's probably a better way to init all these zeroes...
 		towerKills = 0;
 		spawnDelay = firstSpawnDelay;
-		lastSpawn = System.currentTimeMillis();
+		lastSpawn = System.currentTimeMillis();	// because we're spawning an enemy right now
 		buildBlue = true;
 		activeHero = new Hero(this, heroStartX, heroStartY);
 		allUnits = new ArrayList<Unit>();
