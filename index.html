@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+	<script language="javascript"> 
+		function toggleDiv(contentToToggle, labelToToggle, showText, hideText) {
+			var content = document.getElementById(contentToToggle);
+			var label = document.getElementById(labelToToggle);
+			if(content.style.display == "block") {
+    				content.style.display = "none";
+				label.innerHTML = showText;
+  			}
+			else {
+				content.style.display = "block";
+				label.innerHTML = hideText;
+			}
+		} 
+	</script>
 	<head>
 		<meta charset="UTF-8">
 		<title>Night of a Thousand Bugs</title>
@@ -41,36 +55,71 @@
 			<h2>Latest News</h2>
 			<div class="highlight">
 			<dl>
-				<dt><b>April 12, 2014</b></dt>
+				<dt><b>April 6, 2016</b></dt>
 				<dd>
 					<ul>
-						<li>Version 1.2 of the demo has been released.</li>
+						<li>Added ability to toggle older news on this page.</li>
+						<li>Added a new Feature Request.</li>
+						<li>Added some new bugs to the Known Issues list.</li>
 					</ul>
 				</dd>
 				<br>
-				<dt><b>March 23, 2014</b></dt>
+				<dt><b>April 2, 2016</b></dt>
 				<dd>
 					<ul>
-						<li>Dove into the CSS and ended up making this page look girly. Fortunately, as a girl, I'm entitled to do such things.</li>
+						<li>Created a Notepad-friendly version of the demo README.</li>
 					</ul>
 				</dd>
 				<br>
-				<dt><b>March 20, 2014</b></dt>
+				<dt><b>March 21, 2016</b></dt>
 				<dd>
 					<ul>
-						<li>Added pages for Units and Feature Requests.</li>
-						<li>Finished the recolors of the tower image. Now I have the graphics for each type of tower I plan to make.</li>
+						<li>Changed host of this website from UW student environment to GitHub.</li>
 					</ul>
 				</dd>
 				<br>
-				<dt><b>March 17, 2014</b></dt>
+				<dt><b>March 7, 2016</b></dt>
 				<dd>
 					<ul>
-						<li>The barebones edition of this webpage is now live.</li>
-						<li>Demo version 1.1 of the game is now released!</li>
+						<li>Moved the game code from a private GitHub repository to a public one.</li>
 					</ul>
 				</dd>
 			</dl>
+			<br>
+			<a id="newsText" href="javascript:toggleDiv('newsDiv', 'newsText', 'Show older news', 'Hide older news');">Show older news</a>
+			<div id="newsDiv" style="display: none;">
+				<dl>
+					<dt><b>April 12, 2014</b></dt>
+					<dd>
+						<ul>
+							<li>Version 1.2 of the demo has been released.</li>
+						</ul>
+					</dd>
+					<br>
+					<dt><b>March 23, 2014</b></dt>
+					<dd>
+						<ul>
+							<li>Dove into the CSS and ended up making this page look girly. Fortunately, as a girl, I'm entitled to do such things.</li>
+						</ul>
+					</dd>
+					<br>
+					<dt><b>March 20, 2014</b></dt>
+					<dd>
+						<ul>
+							<li>Added pages for Units and Feature Requests.</li>
+							<li>Finished the recolors of the tower image. Now I have the graphics for each type of tower I plan to make.</li>
+						</ul>
+					</dd>
+					<br>
+					<dt><b>March 17, 2014</b></dt>
+					<dd>
+						<ul>
+							<li>The barebones edition of this webpage is now live.</li>
+							<li>Demo version 1.1 of the game is now released!</li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
 			</div>
 			<br><br>
 			<h2>Up Next...</h2>
