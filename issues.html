@@ -36,12 +36,14 @@
                         <br>
 		</nav>
 		<article>
-			<p>Among the thousand, these bugs are currently giving us a hard time...</p>
+			<p>Among the titular thousand, these bugs are currently giving us a hard time...</p>
 			<br>
 			<dl>
 				<div class="highlight">
 				<dt>
-					<b>Issue 1:</b> Sometimes enemy health bars don't seem to work
+					<b>Issue 1:</b> [INTERMITTENT] Enemy health bars don't always work
+					<br>
+					<b>Priority: High (health bars should always work)</b>
 					<br>
 					<b>Discovered by:</b> Erin
 				</dt>
@@ -52,9 +54,54 @@
 				<dt>
 					<b>Issue 2:</b> Current target can become hidden beneath other enemies
 					<br>
+					<b>Priority: High (it may also fix issue 1)</b>
+					<br>
 					<b>Discovered by:</b> Erin
 				</dt>
-					<dd><p><em>Arguably this is more of a feature request than a bug, but if a hero is blocking two or more enemies while attacking, the enemy taking the attacks is usually completely obscured by the other enemies standing in the same spot. Ideally, the one we're attacking should be the one that we see. This problem may also affect towers firing at multiple overlapping enemies, which could explain Issue 1.</em></p></dd>
+					<dd><p><em>If a hero is blocking two or more enemies while attacking, the enemy taking the attacks is usually completely obscured by the other enemies standing in the same spot. Ideally, the one we're attacking should be the one that we see. This problem may also affect towers firing at multiple overlapping enemies, which could explain Issue 1.</em></p></dd>
+				</div>
+				<div class="highlight">
+				<dt>
+					<b>Issue 3:</b> [INTERMITTENT] Enemy attack animations not always used when enemy is attacking a tower
+					<br>
+					<b>Priority: Moderate (affects UX but not gameplay)</b>
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>I feel like this tends to happen to me when I have my hero blocking/attacking an enemy close to a tower, then I move my hero and the enemy proceeds to the tower. Or I could just be crazy; requires further investigation.</em></p></dd>
+				</div>
+				<br><br>
+				<div class="highlight">
+				<dt>
+					<b>Issue 4:</b> [INTERMITTENT] The killing shot sometimes causes "negative" areas of the health bar to draw
+					<br>
+					<b>Priority: Low (affects UX but not gameplay; only visible for a second)</b>
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>Occasionally, the health bar will show a red portion outside its leftmost border as an enemy dies. This is clearly due to a negative value being used in the drawing process; I need to ensure such negatives do not reach the drawing function.</em></p></dd>
+				</div>
+				<br><br>
+				<div class="highlight">
+				<dt>
+					<b>Issue 5:</b> Pre-emptive strikes don't seem to work
+					<br>
+					<b>Priority: High (affects gameplay)</b>
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>I like to line up my hero with an approaching enemy and begin my attack before they reach me, with timing such that they step into my attack as they're trying to reach me. However, I have not yet been successful with this maneuver. It's possible that my timing and hand-eye coordination are just that terrible, but given that it really looks like my spear hits the enemy, I expect this is actually a bug. Bounding box collision detection should occur at the peak of the strike, not when the attack animation begins.</em></p></dd>
+				</div>
+				<br><br>
+				<div class="highlight">
+				<dt>
+					<b>Issue 6:</b> [INTERMITTENT] On occasion, multiple enemies will spawn at the start of the level
+					<br>
+					<b>Priority: Moderate (makes level harder, but not impossible)</b>
+					<br>
+					<b>Discovered by:</b> Erin
+				</dt>
+					<dd><p><em>There should only be one enemy at the very start of the level, but on rare occasion, I've seen two. I wonder if I'm handling the randomness of the first spawn timer correctly; maybe it ended up set to zero or some other small number.</em></p></dd>
 				</div>
 		</article>
 		<aside>
@@ -63,7 +110,7 @@
                 <br><br>
                 <footer>
                         <hr>
-                        Webpage and Game &copy; 2014 Erin Blackmere
+                        Webpage and Game &copy; 2016 Erin Blackmere
                 </footer>
 	</body>
 </html>
