@@ -67,7 +67,7 @@ public class Enemy extends Unit {
 		return new Rectangle(x + enemyTargetOffsetHeroX, y + enemyTargetOffsetHeroY, enemyTargetWidthHero, enemyTargetHeightHero);
 	}
 	
-	// TODO: document the reason for this
+	// TODO: document the reason for this; but first, remember the reason for this >.<
 	public Rectangle getTargetBox() {
 		return getHeroTargetBox();
 	}

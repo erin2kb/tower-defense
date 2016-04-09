@@ -1,19 +1,19 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf340
-\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf510
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \margl1440\margr1440\vieww12420\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs24 \cf0 Overall\
--add unit tests where appropriate\
 -consolidate import statements?\
 -finish filling in all comments/Javadocs\
 -resolve all TODOs\
 -rename 'blackmere' package to 'erin2kb' [and also 'towerdef' to 'tower-defense'?]\
--make enemy spawn locations on map always nightmare-colored?\
--rename towers from color-based to gem-based (ruby, etc.)\
--include a black tower (obsidian? onyx?) that combines green & yellow\'92s effects?\
-\
+-rename towers from color-based to gem-based (ruby, etc.) -- or should it be by effect?\
+-tower images should 'belong' to the tower objects, e.g. so I can call getLockImage() on any tower\
+-create a Sandbox class for playing with new functionality, rather than having to modify a level\
+-should I have a special 'dialog' object? I seem to be just drawing it within each state where it's used\
+-maybe UI menus and buttons should be in separate subpackages of 'ui' (currently they're together)\
 \
 \
 GameManager\
@@ -22,4 +22,38 @@ GameManager\
 \
 \
 Demo\
--should the images be initialized somewhere more central (like maybe Constants? Level superclass??)}
+-should the images be initialized somewhere more central (like maybe Constants? Level superclass??)\
+-might eventually want a more sophisticated method of managing spawn tempo, to scale difficulty across levels\
+-would it be possible to move the <type>Logic() functions into the types themselves?\
+-as stated in the TODOs, handle UI processing better\
+-why do I need a collision detection function in Utility?\
+\
+\
+UI - GameOver\
+-what's all this about glyphs?\
+\
+\
+UI - MainMenu\
+-there's probably some consolidation I can do across the UI classes in general, e.g. the glyph stuff..?\
+\
+\
+Unit - Enemy\
+-subclass for different types; do the same for the other units, too\
+-consolidate common code between the various unit types, either via parent class or interface\
+-see TODOs in code\
+\
+\
+Util - Constants\
+-break up into modules within a "constants" package, rather than a single file\
+\
+\
+Ideas for Enhancement\
+-add unit tests where appropriate\
+-make enemy spawn locations on map always nightmare-colored?\
+-include a black tower that takes extra damage; change green tower's effect to healing radius\
+-include a cyan tower (aquamarine?) that slows enemies; maybe also one that confuses them so they walk the wrong way [opal? garnet? beryl? topaz/citrine? turquoise?]\
+-as a consequence of having so many tower types, I might need to move the tower-choosing UI to the top or bottom of the screen; else shrink the buttons, or maybe make 2 columns of buttons; better yet, do it PvZ style where you can choose a limited number of types\
+-include a system/UI for swapping out heroes\
+-if possible, make the map tiles less blocky, i.e. give the UI 'clouds' more of a cloud shape that overlaps the battlefield slightly\
+-have a variety of different battlefields, not just grass; show progression through the 'dream terrain'\
+-add hotkeys to switch tower types or heroes?}

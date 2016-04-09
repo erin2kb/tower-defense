@@ -260,7 +260,7 @@ public class Demo extends BasicGameState {
 		}
 		
 		if (t.timeToGenerate()) {
-			currentEnergy += t.getEnergy();
+			currentEnergy += t.getEnergy();		// TODO: rename getEnergy() to generateEnergy() or something similar?
 		}
 	}
 	
