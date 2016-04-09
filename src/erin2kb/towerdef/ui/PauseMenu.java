@@ -1,4 +1,4 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
 import java.awt.Font;
 
@@ -14,7 +14,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import static blackmere.towerdef.util.Constants.*;
+import static erin2kb.towerdef.util.Constants.*;
 
 public class PauseMenu extends BasicGameState {
 	
@@ -24,12 +24,12 @@ public class PauseMenu extends BasicGameState {
 	private Button buttonResume, buttonQuit;
 	private UnicodeFont bigFont;	// TODO: constant?
 
-	// TODO: figure out the warning
+	// TODO: figure out the warning -- could it be because of the image-loading issue, i.e. when I changed the package name so it couldn't find the image??
 	@SuppressWarnings("unchecked")
 	public void init(GameContainer container, StateBasedGame manager)
 			throws SlickException {
 		gameManager = manager;
-		dialog = new Image("blackmere/towerdef/res/dialogPause.png");
+		dialog = new Image("erin2kb/towerdef/res/dialogPause.png");
 		dialogOutline = new Rectangle(pauseDialogX, pauseDialogY, pauseDialogWidth, pauseDialogHeight);
 		buttonResume = new Button(pauseDialogX + pauseButtonOffsetX, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);
 		buttonQuit = new Button(pauseDialogX + pauseButtonOffsetX + pauseButtonWidth + pauseButtonOffsetGap, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);

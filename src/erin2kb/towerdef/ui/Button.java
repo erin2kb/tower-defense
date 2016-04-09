@@ -1,9 +1,10 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
-import static blackmere.towerdef.util.Constants.*;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Button {
 	protected int x, y, width, height;

@@ -1,6 +1,6 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
-import static blackmere.towerdef.util.Constants.*;
+import static erin2kb.towerdef.util.Constants.*;
 
 import java.awt.Font;
 
@@ -26,7 +26,7 @@ public class MainMenu extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame manager)
 			throws SlickException {
 		gameManager = manager;
-		background = new Image("blackmere/towerdef/res/mainMenu.png");
+		background = new Image("erin2kb/towerdef/res/mainMenu.png");
 		buttonStart = new Button(mainButtonOffsetX, mainButtonOffsetY, mainButtonWidth, mainButtonHeight);
 		buttonQuit = new Button(mainButtonOffsetX, mainButtonOffsetY + mainButtonHeight + mainButtonOffsetGap, mainButtonWidth, mainButtonHeight);
 		bigFont = new UnicodeFont(new Font("Verdana", Font.BOLD, 42)); 

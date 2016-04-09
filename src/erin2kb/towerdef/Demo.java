@@ -1,4 +1,4 @@
-package blackmere.towerdef;
+package erin2kb.towerdef;
 
 import java.util.ArrayList;
 
@@ -11,22 +11,23 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import erin2kb.towerdef.ui.Button;
+import erin2kb.towerdef.ui.GameOver;
+import erin2kb.towerdef.ui.PauseButton;
+import erin2kb.towerdef.ui.PauseMenu;
+import erin2kb.towerdef.ui.TowerButton;
+import erin2kb.towerdef.ui.Victory;
+import erin2kb.towerdef.units.Bullet;
+import erin2kb.towerdef.units.Enemy;
+import erin2kb.towerdef.units.Hero;
+import erin2kb.towerdef.units.Tower;
+import erin2kb.towerdef.units.Unit;
+import erin2kb.towerdef.util.Direction;
+import erin2kb.towerdef.util.Utility;
 //import org.newdawn.slick.tiled.TiledMap;
 
-import blackmere.towerdef.ui.Button;
-import blackmere.towerdef.ui.GameOver;
-import blackmere.towerdef.ui.PauseButton;
-import blackmere.towerdef.ui.PauseMenu;
-import blackmere.towerdef.ui.TowerButton;
-import blackmere.towerdef.ui.Victory;
-import blackmere.towerdef.units.Enemy;
-import blackmere.towerdef.units.Hero;
-import blackmere.towerdef.units.Tower;
-import blackmere.towerdef.units.Bullet;
-import blackmere.towerdef.units.Unit;
-import blackmere.towerdef.util.Direction;
-import blackmere.towerdef.util.Utility;
-import static blackmere.towerdef.util.Constants.*;
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Demo extends BasicGameState {
 	
@@ -66,9 +67,9 @@ public class Demo extends BasicGameState {
 		allUnits.add(activeHero);
 		allUnits.add(new Enemy(this, enemyStartX, enemyStartY));	// TODO: make separate Debug class? Level superclass?			
 		towerButtons = new ArrayList<TowerButton>();
-		Image towerButtonImageBlue = new Image("blackmere/towerdef/res/towerButtonBlue.png");
-		Image towerButtonImagePurple = new Image("blackmere/towerdef/res/towerButtonPurple.png");
-		Image towerButtonLocked = new Image("blackmere/towerdef/res/towerButtonLocked.png");
+		Image towerButtonImageBlue = new Image("erin2kb/towerdef/res/towerButtonBlue.png");
+		Image towerButtonImagePurple = new Image("erin2kb/towerdef/res/towerButtonPurple.png");
+		Image towerButtonLocked = new Image("erin2kb/towerdef/res/towerButtonLocked.png");
 		TowerButton towerButtonBlue = new TowerButton(towerButtonImageBlue, towerButtonLocked, towerButtonXPos, towerButtonYPos, towerButtonSize, towerButtonSize);
 		TowerButton towerButtonPurple = new TowerButton(towerButtonImagePurple, towerButtonLocked, towerButtonXPos, towerButtonYPos + tileSize, towerButtonSize, towerButtonSize);	// TODO: more precise pos; better init?
 		TowerButton towerButtonRed = new TowerButton(towerButtonImageBlue, towerButtonLocked, towerButtonXPos, towerButtonYPos + 2 * tileSize, towerButtonSize, towerButtonSize);	// TODO: use the actual images
@@ -78,7 +79,7 @@ public class Demo extends BasicGameState {
 		towerButtons.add(towerButtonBlue);
 		towerButtons.add(towerButtonPurple);
 		towerButtons.add(towerButtonRed);
-		Image pauseButtonImage = new Image("blackmere/towerdef/res/pauseButton.png");
+		Image pauseButtonImage = new Image("erin2kb/towerdef/res/pauseButton.png");
 		pauseButton = new PauseButton(pauseButtonImage, pauseButtonXPos, pauseButtonYPos, pauseButtonSize, pauseButtonSize);
 	}
 

@@ -1,13 +1,14 @@
-package blackmere.towerdef.units;
+package erin2kb.towerdef.units;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Demo;
+import erin2kb.towerdef.Demo;
 
-import static blackmere.towerdef.util.Constants.*;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Tower extends Unit {
 
@@ -35,7 +36,7 @@ public class Tower extends Unit {
 		}
 		
 		idleFrames = new Image[towerNumIdleFrames];
-		idleFrames[0] = new Image("blackmere/towerdef/res/tower" + color + ".png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
+		idleFrames[0] = new Image("erin2kb/towerdef/res/tower" + color + ".png");		// TODO: turn into a loop, like in hero/enemy (do same in bullet); consolidate f'n?
 		idleDurationArray = new int[towerNumIdleFrames];
 		idleDurationArray[0] = towerIdleDuration;
 		

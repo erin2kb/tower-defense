@@ -1,4 +1,4 @@
-package blackmere.towerdef.util;
+package erin2kb.towerdef.util;
 
 import org.newdawn.slick.Color;
 
@@ -18,7 +18,7 @@ public class Constants {
 	public final static int windowHeight = 434;
 	public final static int tileSize = 62;
 	public final static int numMaps = 12;
-	public final static String mapPrefix = "blackmere/towerdef/res/map";
+	public final static String mapPrefix = "erin2kb/towerdef/res/map";
 	public final static String mapPostfix = ".png";
 	public final static int initialEnergy = 300;
 	public final static int numEnemiesTotal = 20;

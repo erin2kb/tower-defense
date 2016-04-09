@@ -1,4 +1,4 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

@@ -1,4 +1,4 @@
-package blackmere.towerdef.util;
+package erin2kb.towerdef.util;
 
 import org.newdawn.slick.geom.Rectangle;
 

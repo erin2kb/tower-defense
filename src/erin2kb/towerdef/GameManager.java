@@ -1,17 +1,18 @@
-package blackmere.towerdef;
+package erin2kb.towerdef;
 
-import static blackmere.towerdef.util.Constants.windowHeight;
-import static blackmere.towerdef.util.Constants.windowWidth;
+import static erin2kb.towerdef.util.Constants.windowHeight;
+import static erin2kb.towerdef.util.Constants.windowWidth;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import blackmere.towerdef.ui.GameOver;
-import blackmere.towerdef.ui.MainMenu;
-import blackmere.towerdef.ui.PauseMenu;
-import blackmere.towerdef.ui.Victory;
+import erin2kb.towerdef.ui.GameOver;
+import erin2kb.towerdef.ui.MainMenu;
+import erin2kb.towerdef.ui.PauseMenu;
+import erin2kb.towerdef.ui.Victory;
+
 
 public class GameManager extends StateBasedGame {
 	

@@ -1,16 +1,16 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
-import static blackmere.towerdef.util.Constants.demoID;
-import static blackmere.towerdef.util.Constants.pauseButtonHeight;
-import static blackmere.towerdef.util.Constants.pauseButtonOffsetGap;
-import static blackmere.towerdef.util.Constants.pauseButtonOffsetX;
-import static blackmere.towerdef.util.Constants.pauseButtonOffsetY;
-import static blackmere.towerdef.util.Constants.pauseButtonWidth;
-import static blackmere.towerdef.util.Constants.pauseDialogHeight;
-import static blackmere.towerdef.util.Constants.pauseDialogWidth;
-import static blackmere.towerdef.util.Constants.pauseDialogX;
-import static blackmere.towerdef.util.Constants.pauseDialogY;
-import static blackmere.towerdef.util.Constants.gameOverID;
+import static erin2kb.towerdef.util.Constants.demoID;
+import static erin2kb.towerdef.util.Constants.gameOverID;
+import static erin2kb.towerdef.util.Constants.pauseButtonHeight;
+import static erin2kb.towerdef.util.Constants.pauseButtonOffsetGap;
+import static erin2kb.towerdef.util.Constants.pauseButtonOffsetX;
+import static erin2kb.towerdef.util.Constants.pauseButtonOffsetY;
+import static erin2kb.towerdef.util.Constants.pauseButtonWidth;
+import static erin2kb.towerdef.util.Constants.pauseDialogHeight;
+import static erin2kb.towerdef.util.Constants.pauseDialogWidth;
+import static erin2kb.towerdef.util.Constants.pauseDialogX;
+import static erin2kb.towerdef.util.Constants.pauseDialogY;
 
 import java.awt.Font;
 
@@ -40,7 +40,7 @@ public class GameOver extends BasicGameState {
 			throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		dialog = new Image("blackmere/towerdef/res/dialogGameOver.png");
+		dialog = new Image("erin2kb/towerdef/res/dialogGameOver.png");
 		dialogOutline = new Rectangle(pauseDialogX, pauseDialogY, pauseDialogWidth, pauseDialogHeight);	// TODO: don't just copy Pause, use own constants
 		buttonRetry = new Button(pauseDialogX + pauseButtonOffsetX, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);
 		buttonQuit = new Button(pauseDialogX + pauseButtonOffsetX + pauseButtonWidth + pauseButtonOffsetGap, pauseDialogY + pauseButtonOffsetY, pauseButtonWidth, pauseButtonHeight);

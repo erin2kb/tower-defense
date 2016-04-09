@@ -1,12 +1,13 @@
-package blackmere.towerdef.units;
+package erin2kb.towerdef.units;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Demo;
-import static blackmere.towerdef.util.Constants.*;
+import erin2kb.towerdef.Demo;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 public abstract class Unit {
 	protected float x, y, currentHP, maxHP, damage;

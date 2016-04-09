@@ -1,4 +1,4 @@
-package blackmere.towerdef.units;
+package erin2kb.towerdef.units;
 
 import java.util.ArrayList;
 
@@ -7,10 +7,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Demo;
-import blackmere.towerdef.util.Direction;
-import blackmere.towerdef.util.Utility;
-import static blackmere.towerdef.util.Constants.*;
+import erin2kb.towerdef.Demo;
+import erin2kb.towerdef.util.Direction;
+import erin2kb.towerdef.util.Utility;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 // TODO: consolidate hero and enemy code, if possible
 public class Hero extends Unit {
@@ -31,11 +32,11 @@ public class Hero extends Unit {
 		walkLeftFrames = new Image[heroNumWalkFrames];
 		attackLeftFrames = new Image[heroNumAttackFrames];
 		idleLeftFrames = new Image[heroNumIdleFrames];
-		idleLeftFrames[0] = new Image("blackmere/towerdef/res/hero/wl1.png");
+		idleLeftFrames[0] = new Image("erin2kb/towerdef/res/hero/wl1.png");
 		walkRightFrames = new Image[heroNumWalkFrames];
 		attackRightFrames = new Image[heroNumAttackFrames];
 		idleRightFrames = new Image[heroNumIdleFrames];
-		idleRightFrames[0] = new Image("blackmere/towerdef/res/hero/wr1.png");
+		idleRightFrames[0] = new Image("erin2kb/towerdef/res/hero/wr1.png");
 		walkDurationArray = new int[heroNumWalkFrames];
 		attackDurationArray = new int[heroNumAttackFrames];
 		idleDurationArray = new int[heroNumIdleFrames];
@@ -43,8 +44,8 @@ public class Hero extends Unit {
 		
 		for (int i = 0; i < heroNumWalkFrames; i++) {
 			int index = i + 1;
-			String leftName = "blackmere/towerdef/res/hero/wl" + index + ".png";
-			String rightName = "blackmere/towerdef/res/hero/wr" + index + ".png";
+			String leftName = "erin2kb/towerdef/res/hero/wl" + index + ".png";
+			String rightName = "erin2kb/towerdef/res/hero/wr" + index + ".png";
 			walkLeftFrames[i] = new Image(leftName);
 			walkRightFrames[i] = new Image(rightName);
 			walkDurationArray[i] = heroWalkDuration;
@@ -52,8 +53,8 @@ public class Hero extends Unit {
 		
 		for (int i = 0; i < heroNumAttackFrames; i++) {
 			int index = i + 1;
-			String leftName = "blackmere/towerdef/res/hero/al" + index + ".png";
-			String rightName = "blackmere/towerdef/res/hero/ar" + index + ".png";
+			String leftName = "erin2kb/towerdef/res/hero/al" + index + ".png";
+			String rightName = "erin2kb/towerdef/res/hero/ar" + index + ".png";
 			attackLeftFrames[i] = new Image(leftName);
 			attackRightFrames[i] = new Image(rightName);
 			attackDurationArray[i] = heroAttackDuration;
@@ -89,6 +90,9 @@ public class Hero extends Unit {
 		Rectangle box = getMotionBox();
 		float newX = box.getX();
 		float newY = box.getY();
+		
+		// TODO: I encountered a bug when I was attacking 2 enemies from behind as they attacked a tower, while 3rd enemy attacked me from behind. After defeating the 2 enemies, I was unable to move in the direction
+		// of where they had been standing; I was luckily able to turn around and attack the one behind me, but wasn't able to move from this spot until I defeated him [got out of it by moving down]
 		
 		switch (direction) {
 		case UP:			// leaving this empty equates to "UP || DOWN"

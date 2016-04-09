@@ -1,4 +1,4 @@
-package blackmere.towerdef.ui;
+package erin2kb.towerdef.ui;
 
 import java.awt.Font;
 
@@ -14,7 +14,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import static blackmere.towerdef.util.Constants.*;
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Victory extends BasicGameState {
 	private StateBasedGame gameManager;
@@ -30,7 +30,7 @@ public class Victory extends BasicGameState {
 			throws SlickException {
 		gameManager = manager;
 		gameContainer = container;
-		dialog = new Image("blackmere/towerdef/res/dialogPause.png");	// TODO: don't just copy Pause [[rename the image]]
+		dialog = new Image("erin2kb/towerdef/res/dialogPause.png");	// TODO: don't just copy Pause [[rename the image]]
 		dialogOutline = new Rectangle(pauseDialogX, pauseDialogY, pauseDialogWidth, pauseDialogHeight);	// TODO: don't just copy Pause, use own constants
 		buttonReplay = new Button(pauseDialogX + victoryButtonOffsetX, pauseDialogY + pauseButtonOffsetY, victoryButtonWidth, pauseButtonHeight);
 		buttonQuit = new Button(pauseDialogX + victoryButtonOffsetX + pauseButtonWidth + pauseButtonOffsetGap, pauseDialogY + pauseButtonOffsetY, victoryButtonWidth, pauseButtonHeight);

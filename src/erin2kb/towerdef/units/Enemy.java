@@ -1,4 +1,4 @@
-package blackmere.towerdef.units;
+package erin2kb.towerdef.units;
 
 import java.util.ArrayList;
 
@@ -7,10 +7,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Demo;
-import blackmere.towerdef.util.Utility;
+import erin2kb.towerdef.Demo;
+import erin2kb.towerdef.util.Utility;
 
-import static blackmere.towerdef.util.Constants.*;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Enemy extends Unit {
 	private Image[] idleFrames,	walkFrames, attackFrames;
@@ -28,7 +29,7 @@ public class Enemy extends Unit {
 		walkFrames = new Image[enemyNumWalkFrames];
 		attackFrames = new Image[enemyNumAttackFrames];
 		idleFrames = new Image[enemyNumIdleFrames];
-		idleFrames[0] = new Image("blackmere/towerdef/res/enemy/spider/w1.png");
+		idleFrames[0] = new Image("erin2kb/towerdef/res/enemy/spider/w1.png");
 		walkDurationArray = new int[enemyNumWalkFrames];
 		attackDurationArray = new int[enemyNumAttackFrames];
 		idleDurationArray = new int[enemyNumIdleFrames];
@@ -36,14 +37,14 @@ public class Enemy extends Unit {
 		
 		for (int i = 0; i < enemyNumWalkFrames; i++) {
 			int index = i + 1;
-			String name = "blackmere/towerdef/res/enemy/spider/old/w" + index + ".png";		// TODO: decide on a final set and remove 'old'
+			String name = "erin2kb/towerdef/res/enemy/spider/old/w" + index + ".png";		// TODO: decide on a final set and remove 'old'
 			walkFrames[i] = new Image(name);
 			walkDurationArray[i] = enemyWalkDuration;
 		}
 		
 		for (int i = 0; i < enemyNumAttackFrames; i++) {
 			int index = i + 1;
-			String name = "blackmere/towerdef/res/enemy/spider/a" + index + ".png";
+			String name = "erin2kb/towerdef/res/enemy/spider/a" + index + ".png";	// TODO: make these paths generically stored and build upon them as needed
 			attackFrames[i] = new Image(name);
 			attackDurationArray[i] = enemyAttackDuration;
 		}

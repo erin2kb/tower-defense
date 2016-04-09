@@ -1,14 +1,15 @@
-package blackmere.towerdef.units;
+package erin2kb.towerdef.units;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import blackmere.towerdef.Demo;
-import blackmere.towerdef.util.Utility;
+import erin2kb.towerdef.Demo;
+import erin2kb.towerdef.util.Utility;
 
-import static blackmere.towerdef.util.Constants.*;
+
+import static erin2kb.towerdef.util.Constants.*;
 
 public class Bullet extends Unit {
 
@@ -28,7 +29,7 @@ public class Bullet extends Unit {
 		}
 		
 		idleFrames = new Image[bulletNumIdleFrames];
-		idleFrames[0] = new Image("blackmere/towerdef/res/bullet" + color + ".png");
+		idleFrames[0] = new Image("erin2kb/towerdef/res/bullet" + color + ".png");
 		idleDurationArray = new int[1];
 		idleDurationArray[0] = bulletIdleDuration;
 		
